@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Cherish each other while moving on together! —— 且行且珍惜！]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2014-04-05T14:31:49.641Z</updated>
+  <updated>2014-04-05T16:00:47.574Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,9 +15,79 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[markdown最佳入门指南]]></title>
+    <link href="http://yoursite.com/2014/04/05/markdow_init/"/>
+    <id>http://yoursite.com/2014/04/05/markdow_init/</id>
+    <published>2014-04-05T14:51:17.000Z</published>
+    <updated>2014-04-05T15:59:44.000Z</updated>
+    <content type="html"><![CDATA[<p>首先大家不要因为标题拍我，也不要无端黑我，以下内容不是我原创的，也是从网上众多的指南中淬炼而来，至少我看了后5分钟，基本搞定了mardown基本用法，以我的智商，想必大家3分钟就全搞定了，好处不用我多说，直接上菜了。</p>
+<h2 id="第一步">第一步</h2>
+<p>当然找一个编辑器来用Markdown写作了，给大家隆重推荐——简书</p>
+<ol>
+<li>注册并登录 <a href="http://jianshu.io" target="_blank">简书</a><br>【ps：本人不是简书的哦，只是觉得这个当作Markdown的在线编辑器，用起来挺爽，而且里面的一些文章还很不错，算是一举两得，一箭双雕】</li>
+<li>点击页面左侧的“写文章”，进入编辑后，新建一篇笔记，然后关键步骤来了，编辑器右上角有一个<strong>预览模式</strong>按钮，点击进入后，你就可以一边写Markdown，一边预览到实际效果了，大赞啊！</li>
+</ol>
+<p><img src="http://ww2.sinaimg.cn/large/687afc7fjw1dzs642j2qoj.jpg" alt=""></p>
+<h2 id="第二步">第二步</h2>
+<p>工具有了，我们就可以开始Markdown之旅了，大家跟上，重点来了</p>
+<h3 id="标题">标题</h3>
+<p>这是最为常用的格式，在平时常用的的文本编辑器中大多是这样实现的：输入文本、选中文本、设置标题格式。在 Markdown 中，你只需要在文本前面加上<strong>#</strong>     即可，同理、你还可以增加二级标题、三级标题、四级标题、五级标题和六级标题，总共六级，只需要增加 <strong>#</strong> 即可，标题字号相应降低。例如：</p>
+<pre><code><span class="preprocessor"># 一级标题</span>
+<span class="preprocessor">## 二级标题</span>
+<span class="preprocessor">### 三级标题</span>
+<span class="preprocessor">#### 四级标题</span>
+<span class="preprocessor">##### 五级标题</span>
+<span class="preprocessor">###### 六级标题</span>
+</code></pre><p><em>【注意】</em> <strong>#</strong>和“标题内容”之间建议保留一个空格，这是最标准的Markdown写法。<br>如下图所示：</p>
+<p><img src="http://ww4.sinaimg.cn/large/687afc7fjw1dzs5crii94j.jpg" alt=""></p>
+<h3 id="列表">列表</h3>
+<p>列表格式也很常用，在 Markdown 中，你只需要在文字前面加上 - 就可以了，例如：</p>
+<pre><code>-<span class="ruby"> 文本<span class="number">1</span>
+</span>-<span class="ruby"> 文本<span class="number">2</span>
+</span>-<span class="ruby"> 文本<span class="number">3</span></span>
+</code></pre><p>如果你希望有序列表，也可以在文字前面加上 1. 2. 3. 就可以了，例如：</p>
+<pre><code><span class="bullet">1. </span>文本1
+<span class="bullet">2. </span>文本2
+<span class="bullet">3. </span>文本3
+</code></pre><p><em>【注意】</em> <strong>-</strong>、<strong>1.</strong>和文本之间也建议保留一个空格<br>如下图效果所示：</p>
+<p><img src="http://ww1.sinaimg.cn/large/687afc7fjw1dzs56gavuzj.jpg" alt=""></p>
+<h3 id="链接和图片">链接和图片</h3>
+<p>在 Markdown 中，插入链接不需要其他按钮，你只需要使用 <strong>[显示文本](链接地址) </strong>这样的语法即可，例如：</p>
+<pre><code>[<span class="link_label">简书</span>](<span class="link_url">http://jianshu.io</span>)
+</code></pre><p>在 Markdown 中，插入图片不需要其他按钮，你只需要使用    <strong>![](图片链接地址)</strong>   这样的语法即可，例如：</p>
+<pre><code>![](http://ww4<span class="preprocessor">.sinaimg</span><span class="preprocessor">.cn</span>/bmiddle/aa397b7fjw1dzplsgpdw5j<span class="preprocessor">.jpg</span>)
+</code></pre><p>如下效果图所示：</p>
+<p><img src="http://ww3.sinaimg.cn/large/687afc7fjw1dzs5i4iw3uj.jpg" alt=""></p>
+<h3 id="引用">引用</h3>
+<p>在我们写作的时候经常需要引用他人的文字，这个时候引用这个格式就很有必要了，在 Markdown 中，你只需要在你希望引用的文字前面加上 <strong>&gt; </strong> 就好了，例如：</p>
+<pre><code>一盏灯， 一片昏黄； 一简书， 一杯淡茶。 守着那一份淡定， 品读属于自己的寂寞。 保持淡定， 才能欣赏到最美丽的风景！ 保持淡定， 人生从此不再寂寞。
+</code></pre><p>最终显示：</p>
+<blockquote>
+<p>一盏灯， 一片昏黄； 一简书， 一杯淡茶。 守着那一份淡定， 品读属于自己的寂寞。 保持淡定， 才能欣赏到最美丽的风景！ 保持淡定， 人生从此不再寂寞。</p>
+</blockquote>
+<h3 id="粗体和斜体">粗体和斜体</h3>
+<p>Markdown 的粗体和斜体也非常简单，用两个 <em> 包含一段文本就是粗体的语法，用一个 </em> 包含一段文本就是斜体的语法。例如：</p>
+<pre><code> <span class="emphasis">*一盏灯*</span>， 一片昏黄；<span class="strong">**一简书**</span>， 一杯淡茶。 守着那一份淡定， 品读属于自己的寂寞。 保持淡定， 才能欣赏到最美丽的风景！ 保持淡定， 人生从此不再寂寞。
+</code></pre><p>最终显示的就是下文，其中「一盏灯」是斜体，「一简书」是粗体：</p>
+<p><em>一盏灯</em>， 一片昏黄；<strong>一简书</strong>， 一杯淡茶。 守着那一份淡定， 品读属于自己的寂寞。 保持淡定， 才能欣赏到最美丽的风景！ 保持淡定， 人生从此不再寂寞。</p>
+<h2 id="第三步">第三步</h2>
+<p>如果还需要跟进一步的使用，请移驾到这里——<a href="http://wowubuntu.com/markdown/" target="_blank">Markdown语法说明</a></p>
+<p>大家是不是会用了呢，如果还有不懂的地方，可以直接留言，我会及时答复，谢谢！</p>
+]]></content>
+    
+    
+      <category term="Markdown" scheme="http://yoursite.com/tags/Markdown/"/>
+    
+      <category term="工具" scheme="http://yoursite.com/tags/%E5%B7%A5%E5%85%B7/"/>
+    
+      <category term="工具&amp;技巧" scheme="http://yoursite.com/categories/%E5%B7%A5%E5%85%B7&%E6%8A%80%E5%B7%A7/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[【python特殊用法系列1】filter,map,reduce,lambda]]></title>
-    <link href="http://yoursite.com/2014/04/05/my-new-post/"/>
-    <id>http://yoursite.com/2014/04/05/my-new-post/</id>
+    <link href="http://yoursite.com/2014/04/05/python-special-1/"/>
+    <id>http://yoursite.com/2014/04/05/python-special-1/</id>
     <published>2014-04-05T08:32:21.000Z</published>
     <updated>2014-04-05T13:32:41.000Z</updated>
     <content type="html"><![CDATA[<p>看到这篇文章的人，想必都对python的各种诡谲技巧是又爱又恨，也都抱着掌握这些技巧，改善自己的生活，提升自己的境界；哈哈本文可能不能让大家这么快速做出改变，但可以让大家稍微见识一下python的几种特殊技巧和用法。这篇文章主要是介绍filter、map、reduce、lambda，后续还会继续该系列主题的淬炼，废话不多说，进入主题。</p>

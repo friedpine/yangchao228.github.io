@@ -53,6 +53,319 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2014-04-06T11:01:00.000Z"><a href="/2014/04/06/machine_learning_2/">4月 6 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/04/06/machine_learning_2/">集体智慧编程系列-2.提供推荐</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>本章主要内容是教会大家【<em>如何根据群体偏好来给人们提供推荐</em>】，这些应用多如牛毛，我就不跟大家像书里那样废话一堆了(不好意思，作者大人），直接进入正题吧，嘻嘻!</p>
+<h3 id="协作型过滤">协作型过滤</h3>
+<p>一个协作型过滤算法通常的做法就是对一大群人进行搜索，并从中找出与我们品味相近的一小群人。算法会对这些人所偏爱的其他内容进行考察，并将它们组合起来构造出一个经过排名的推荐列表。</p>
+<h3 id="搜集偏好">搜集偏好</h3>
+<p>我们要做的第一件事就是寻找一种表达不同人及其偏好的方法。在python中，达到这一目的的一种非常简单的方法是使用一个嵌套的字典。</p>
+<pre><code><span class="preprocessor"># 这是一个字典结构表示每个影评人对所看电影的评分情况，后续所有</span>
+<span class="preprocessor">#计算均基于该数据</span>
+critics={<span class="string">'Lisa Rose'</span>: {<span class="string">'Lady in the Water'</span>: <span class="number">2.5</span>, <span class="string">'Snakes on a Plane'</span>: <span class="number">3.5</span>,
+ <span class="string">'Just My Luck'</span>: <span class="number">3.0</span>, <span class="string">'Superman Returns'</span>: <span class="number">3.5</span>, <span class="string">'You, Me and Dupree'</span>: <span class="number">2.5</span>,
+ <span class="string">'The Night Listener'</span>: <span class="number">3.0</span>},
+<span class="string">'Gene Seymour'</span>: {<span class="string">'Lady in the Water'</span>: <span class="number">3.0</span>, <span class="string">'Snakes on a Plane'</span>: <span class="number">3.5</span>,
+ <span class="string">'Just My Luck'</span>: <span class="number">1.5</span>, <span class="string">'Superman Returns'</span>: <span class="number">5.0</span>, <span class="string">'The Night Listener'</span>: <span class="number">3.0</span>,
+ <span class="string">'You, Me and Dupree'</span>: <span class="number">3.5</span>},
+<span class="string">'Michael Phillips'</span>: {<span class="string">'Lady in the Water'</span>: <span class="number">2.5</span>, <span class="string">'Snakes on a Plane'</span>: <span class="number">3.0</span>,
+ <span class="string">'Superman Returns'</span>: <span class="number">3.5</span>, <span class="string">'The Night Listener'</span>: <span class="number">4.0</span>},
+<span class="string">'Claudia Puig'</span>: {<span class="string">'Snakes on a Plane'</span>: <span class="number">3.5</span>, <span class="string">'Just My Luck'</span>: <span class="number">3.0</span>,
+ <span class="string">'The Night Listener'</span>: <span class="number">4.5</span>, <span class="string">'Superman Returns'</span>: <span class="number">4.0</span>,
+ <span class="string">'You, Me and Dupree'</span>: <span class="number">2.5</span>},
+<span class="string">'Mick LaSalle'</span>: {<span class="string">'Lady in the Water'</span>: <span class="number">3.0</span>, <span class="string">'Snakes on a Plane'</span>: <span class="number">4.0</span>,
+ <span class="string">'Just My Luck'</span>: <span class="number">2.0</span>, <span class="string">'Superman Returns'</span>: <span class="number">3.0</span>, <span class="string">'The Night Listener'</span>: <span class="number">3.0</span>,
+ <span class="string">'You, Me and Dupree'</span>: <span class="number">2.0</span>},
+<span class="string">'Jack Matthews'</span>: {<span class="string">'Lady in the Water'</span>: <span class="number">3.0</span>, <span class="string">'Snakes on a Plane'</span>: <span class="number">4.0</span>,
+ <span class="string">'The Night Listener'</span>: <span class="number">3.0</span>, <span class="string">'Superman Returns'</span>: <span class="number">5.0</span>, <span class="string">'You, Me and Dupree'</span>: <span class="number">3.5</span>},
+<span class="string">'Toby'</span>: {<span class="string">'Snakes on a Plane'</span>:<span class="number">4.5</span>,<span class="string">'You, Me and Dupree'</span>:<span class="number">1.0</span>,<span class="string">'Superman         Returns'</span>:<span class="number">4.0</span>}}
+</code></pre><h3 id="寻找相近的用户">寻找相近的用户</h3>
+<p>搜集完人们的偏好数据之后，我们需要有一种方法来确定人们在品味方面的相似程度。为此，我们可以将每个人与所有其他人进行对比，并计算他们的相似度评价值。有若干种方法可以达到此目的，比如以下两套计算相似度评价值的体系：欧几里德距离和皮尔逊相关度。<br>关于欧几里德距离评价方法，它以经过人们一致评价的物品为坐标轴，然后将参与评价的人绘制到图上，并考察他们彼此间的距离远近，如下图所示：<br><img src="http://d.pcs.baidu.com/thumbnail/65232ce19b00851543901cb59fe6453a?fid=3441392098-250528-110367289197207&amp;time=1396782689&amp;rt=pr&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-iyMYJp2ndi3se1PhNXsN4tak2WM%3D&amp;expires=8h&amp;prisign=amMwnVibYf88f2TB/V4FApSN5rJwOqzRd3VKNKTQ53AEKBJxWcpoyj96l6p65hrwJTMtBHDFE4x/3SKcGzuw+x45oLOM2ebDsA7W9Ml4qnqaYWCq8K+F5CgaPnWGDcoBrCDY1BGDvZpOdoN3ZQgE9dKfxiciRCca/tIS6DrqIid232pW9BdEEXBtrRUCrJk2HOV0gRi4YibT+Ql30Q8gVtb3Wm079R0xdwDR5mTCIRbDm0jOwJKo8uO15KBv3B7n&amp;r=318779482&amp;size=c850_u580&amp;quality=100" alt=""></p>
+<p>两人在“偏好空间”中的距离越近，他们的兴趣偏好就越相似，因为这张图是二维，所以你只能看到两项评分，但这一规则对于更多数量的评分项而言是同样适用的。不过我们还需要一个函数来对偏好越相近的情况给出越大的值，为此我们可以将函数加1（避免遇到被0整除的错误），并取其倒数。如此我们就可以出一个计算相似度的函数：</p>
+<pre><code><span class="comment"># 返回一个有关person1和person2的基于距离的相似度评价</span>
+<span class="function"><span class="keyword">def</span> <span class="title">sim_distance</span><span class="params">(prefs,person1,person2)</span>:</span>
+  <span class="comment"># Get the list of shared_items</span>
+  si={}
+  <span class="keyword">for</span> item <span class="keyword">in</span> prefs[person1]:
+    <span class="keyword">if</span> item <span class="keyword">in</span> prefs[person2]: si[item]=<span class="number">1</span>
+
+  <span class="comment"># if they have no ratings in common, return 0</span>
+  <span class="keyword">if</span> len(si)==<span class="number">0</span>: <span class="keyword">return</span> <span class="number">0</span>
+
+  <span class="comment"># Add up the squares of all the differences</span>
+  sum_of_squares=sum([pow(prefs[person1][item]-prefs[person2][item],<span class="number">2</span>)
+                      <span class="keyword">for</span> item <span class="keyword">in</span> prefs[person1] <span class="keyword">if</span> item <span class="keyword">in</span> prefs[person2]])
+  <span class="keyword">return</span> <span class="number">1</span>/(<span class="number">1</span>+sum_of_squares)
+</code></pre><p>在来看看皮尔逊相关度评价，该相关系数是判断两组数据与某一直线的拟合程度的一种度量。它更适用于数据不是很规范（比如评价总是相对于平均水平偏离很大时），会倾向于给出更好的结果，下图展示的是两位影评人（分别为x与y）对不同电影的打分：<br><img src="http://d.pcs.baidu.com/thumbnail/c3032a05f00d4cb5c965db9e47011025?fid=3441392098-250528-854762854253235&amp;time=1396782689&amp;rt=pr&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-njTOyWLDXxi5tdZIc%2FFuL1%2B6pQw%3D&amp;expires=8h&amp;prisign=amMwnVibYf88f2TB/V4FApSN5rJwOqzRd3VKNKTQ53AEKBJxWcpoyj96l6p65hrwJTMtBHDFE4x/3SKcGzuw+x45oLOM2ebDsA7W9Ml4qnqaYWCq8K+F5CgaPnWGDcoBrCDY1BGDvZpOdoN3ZQgE9dKfxiciRCca/tIS6DrqIid232pW9BdEEXBtrRUCrJk2HOV0gRi4YibT+Ql30Q8gVtb3Wm079R0xdwDR5mTCIRbDm0jOwJKo8uO15KBv3B7n&amp;r=859707287&amp;size=c850_u580&amp;quality=100" alt=""></p>
+<p>图上我们看到了一条直线，因其绘制原则是尽可能地靠近图上的所有坐标点，故而称作“最佳拟合线（best-fit line）”。如果两位评论者对所有影片的评分情况相同，那么这直线将会成为对角线，并且会与图上所有的坐标点相交，从而得到一个结果为1的理想相关度评价。<br>另外值得注意的是采用皮尔逊方法进行评价时，它修正了“夸大分值（grade inflation）”的情况，比如一个人总是比另一个人给出一个更好的评分，而正好这个分值之差又始终保持一致，则他们依然存在很好的关联性。然后用“欧几里德距离”评价的话，会因为一个人总比另一个人的评分要高，导致两者不相近的结论，即使他们品味相似。而这一行为是否是我们需要的结果，则取决于具体的应用场景。<br>皮尔逊相关度评价算法首先会找出两位评论者都曾评价过的物品，然后计算两者的评分总和与平方和，并求得评分的乘积之和。最后，算法利用这些结果计算出皮尔逊相关系数，这一公式相对于欧几里德不是非常直观，但是通过除以将所有变量的变化值相乘后得到得结果，它的确能告诉我们变量的总体变化情况。<br>实现算法如下：</p>
+<pre><code><span class="header"># 返回p1和p2的皮尔逊相关系数</span>
+def sim_pearson(prefs,p1,p2):
+  # Get the list of mutually rated items
+  si={}
+  for item in prefs[p1]:
+<span class="code">    if item in prefs[p2]: si[item]=1</span>
+
+  # if they are no ratings in common, return 0
+  if len(si)==0: return 0
+
+  # Sum calculations
+  n=len(si)
+
+  # Sums of all the preferences
+  sum1=sum([<span class="link_label">prefs[p1</span>][<span class="link_reference">it</span>] for it in si])
+  sum2=sum([<span class="link_label">prefs[p2</span>][<span class="link_reference">it</span>] for it in si])
+
+  # Sums of the squares
+  sum1Sq=sum([<span class="link_label">pow(prefs[p1</span>][<span class="link_reference">it</span>],2) for it in si])
+  sum2Sq=sum([<span class="link_label">pow(prefs[p2</span>][<span class="link_reference">it</span>],2) for it in si])
+
+  # Sum of the products
+  pSum=sum([<span class="link_label">prefs[p1</span>][<span class="link_reference">it</span>]*prefs[<span class="link_label">p2</span>][<span class="link_reference">it</span>] for it in si])
+
+  # Calculate r (Pearson score)
+  num=pSum-(sum1*sum2/n)
+  den=sqrt((sum1Sq-pow(sum1,2)/n)*(sum2Sq-pow(sum2,2)/n))
+  if den==0: return 0
+
+  r=num/den
+  return r
+</code></pre><h3 id="为评论者打分，找到自己人！">为评论者打分，找到自己人！</h3>
+<p>接下来我们在实际场景下使用上面的算法，我们根据指定人员对每个人进行打分，并找出最接近的匹配结果，本例我们就是找寻与自己有相似品味的影评人，因为这样我们就知道在选择影片时我们应该采纳谁的建议了，太棒了！下面就是实现代码：</p>
+<pre><code><span class="comment"># Returns the best matches for person from the prefs dictionary.</span>
+<span class="comment"># Number of results and similarity function are optional params.</span>
+<span class="function"><span class="keyword">def</span> <span class="title">topMatches</span><span class="params">(prefs,person,n=<span class="number">5</span>,similarity=sim_pearson)</span>:</span>
+  scores=[(similarity(prefs,person,other),other)
+                  <span class="keyword">for</span> other <span class="keyword">in</span> prefs <span class="keyword">if</span> other!=person]
+  scores.sort()
+  scores.reverse()
+  <span class="keyword">return</span> scores[<span class="number">0</span>:n]
+该函数利用了Python的列表推导式，采用先前定义过的皮尔逊相关度评价算法，将自身与字典中的其他每一个用户进行比较，然后函数返回排序结果的前n项
+</code></pre><h3 id="推荐物品">推荐物品</h3>
+<p>通过上文能找到趣味相投的影评者固然不错，但跟时常的情况是我们需要的是一份影片的推荐，通过在与自己品味相近的人那里挑选他所喜欢的影片一个是随意，一个是累，而且有时候影评人自己都还没看过新的电影，当然也不存在相应的评论。 更可怕的情况时，我们可能找到一个热衷某一部影片的古怪评论者，而根据topMatches所返回的结果，其他评论者都不看好该影片。<br>为了解决该问题，我们需要通过一个经过加权的评价值来为影片打分，评论者的评分结果因此而形成了先后的排名。为此我们需要取得所有评论者的评价结果，借此得到相似度后，再乘以他们为每部影片所给的评价值。如下表:<br><img src="http://d.pcs.baidu.com/thumbnail/79be0ba3f36a0d37a0a4ecb3492490ef?fid=3441392098-250528-1070099374939031&amp;time=1396782689&amp;rt=pr&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-d2%2F1sOjDM5gzkd0etT0pHTK8Ybc%3D&amp;expires=8h&amp;prisign=amMwnVibYf88f2TB/V4FApSN5rJwOqzRd3VKNKTQ53AEKBJxWcpoyj96l6p65hrwJTMtBHDFE4x/3SKcGzuw+x45oLOM2ebDsA7W9Ml4qnqaYWCq8K+F5CgaPnWGDcoBrCDY1BGDvZpOdoN3ZQgE9dKfxiciRCca/tIS6DrqIid232pW9BdEEXBtrRUCrJk2HOV0gRi4YibT+Ql30Q8gVtb3Wm079R0xdwDR5mTCIRbDm0jOwJKo8uO15KBv3B7n&amp;r=975566174&amp;size=c850_u580&amp;quality=100" alt=""></p>
+<p>如此，相比于与我们不相似的人，那些与我们相似的人将会对整体评价值拥有更多的贡献。我们也可以选择利用总值来计算排名，但是我们必须要要考虑到更多的影评人可能会对结果造成更大的影响。为了修正这一问题，我们通过除以相似度之和（Sim.Sum)。<br>下列代码反映了上述过程，非常简单易懂，并且它对欧几里德距离评价或者皮尔逊相关度评价都是适用的：</p>
+<pre><code><span class="comment"># Gets recommendations for a person by using a weighted average</span>
+<span class="comment"># of every other user's rankings</span>
+<span class="comment"># 利用所有他人评价值的加权平均，为默认提供建议</span>
+<span class="function"><span class="keyword">def</span> <span class="title">getRecommendations</span><span class="params">(prefs, person, similarity=sim_pearson)</span>:</span>
+  totals = {}
+  simSums = {}
+  <span class="keyword">for</span> other <span class="keyword">in</span> prefs:
+    <span class="comment"># don't compare me to myself</span>
+    <span class="comment">#不要和自己比较</span>
+    <span class="keyword">if</span> other == person: <span class="keyword">continue</span>
+    sim=similarity(prefs,person,other)
+
+    <span class="comment"># ignore scores of zero or lower</span>
+    <span class="comment"># 忽略评价为0或者小于0的情况</span>
+    <span class="keyword">if</span> sim &lt;= <span class="number">0</span>: <span class="keyword">continue</span>
+    <span class="keyword">for</span> item <span class="keyword">in</span> prefs[other]:
+      <span class="comment"># only score movies I haven't seen yet</span>
+      <span class="comment"># 只对自己还未看过的电影进行评价</span>
+      <span class="keyword">if</span> item <span class="keyword">not</span> <span class="keyword">in</span> prefs[person] <span class="keyword">or</span> prefs[person][item]==<span class="number">0</span>:
+        <span class="comment"># Similarity * Score</span>
+        totals.setdefault(item,<span class="number">0</span>)
+        totals[item] += prefs[other][item]*sim
+        <span class="comment"># Sum of similarities</span>
+        simSums.setdefault(item,<span class="number">0</span>)
+        simSums[item] += sim
+
+  <span class="comment"># Create the normalized list</span>
+  <span class="comment"># 建立一个归一化列表</span>
+  rankings = [(total/simSums[item], item) <span class="keyword">for</span> item, total <span class="keyword">in</span> totals.items()]
+
+  <span class="comment"># Return the sorted list</span>
+  rankings.sort()
+  rankings.reverse()
+  <span class="keyword">return</span> rankings
+</code></pre><h3 id="匹配商品">匹配商品</h3>
+<p>我们已经知道如何为指定人员寻找品味相近者，以及如何推荐商品，但是假如我们想了解哪些商品是彼此相近的，那该如何做呢？在这种情况下，我们可以通过产看哪些人喜欢某一个特定物品，以及这些人喜欢其他物品来决定相似度，事实上和我们上面在获取人与人的相似度的方法一样——只需要在人员和物品对换即可。<br>将人和物对调并不会总是得到有价值的结果，但大多数情况有助于做出有意义的对比，比如为了向不同个体推荐商品，可能会先收集人们的购买历史，将商品与人对调——可以令零售商找到购买某些商品的潜在客户。另一个潜在用途则是在专门推荐链接的网站上，这样可以确保新出现的连接能够被那些最有可能对它产生兴趣的用户找到。</p>
+<h3 id="基于物品的过滤">基于物品的过滤</h3>
+<p>从上面来看我们用的技术被称为“基于用户的协作过滤”，除此之外，另一种可供选择的方法被称为“基于物品的协作过滤”，在拥有大量数据集的情况下，基于物品的协作性过滤能够得出更好的结论，而且它允许我们将将大量计算任务预先进行，从而使给予推荐的用户能够更快地得到所要的结果。<br>其总体思路就是为每件物品预先计算好最为相近的其他物品。然后 当我们想为某位用户提供推荐时，就可以查看他曾经评过分的物品，从而选出排位靠前者，在构造出一个加权列表，其中包含了与这些选中物品最为相似的其他物品，这里与之前基于用户的最显著的区别在于，物品间的比较不会像用户间的比较那么频繁变化。这就意味着物品的相似度可以单独预先进行。</p>
+<h3 id="构造物品比较数据">构造物品比较数据</h3>
+<p>为了对物品进行比较，我们要做的第一件事就是编写一个函数，构造一个包含相近物品的完整数据集，如下代码所示：</p>
+<pre><code>  <span class="function"><span class="keyword">def</span> <span class="title">calculateSimilarItems</span><span class="params">(prefs,n=<span class="number">10</span>)</span>:</span>
+  <span class="comment"># Create a dictionary of items showing which other items they</span>
+  <span class="comment"># are most similar to.</span>
+  result={}
+  <span class="comment"># Invert the preference matrix to be item-centric</span>
+  <span class="comment"># 以物品为中心对偏好矩阵实施倒置处理</span>
+  itemPrefs=transformPrefs(prefs)
+  <span class="keyword">for</span> item <span class="keyword">in</span> itemPrefs:
+    <span class="comment"># Find the most similar items to this one</span>
+    <span class="comment"># 寻找最为相近的物品</span>
+    scores=topMatches(itemPrefs,item,n=n,similarity=sim_distance)
+    result[item]=scores
+  <span class="keyword">return</span> result
+</code></pre><p>该函数首先利用了transformPrefs函数，对反映评价值的字典进行倒置处理，从而得到一个有关物品及其用户评价情况的列表，然后程序循环遍历每项物品，并将转换了的字典传入topMatches函数中，求得最为近似的物品及其相似度评价值，最后返回一个包含物品及其相近物品列表的字典</p>
+<h3 id="获得推荐">获得推荐</h3>
+<p>现在我们可以在不遍历整个数据集的情况下，利用反映物品相似度的字典来给出推荐了。我们可以取到用户评价过的所有物品，找出相近的物品，并根据相似度对其进行加权，我们可以很容易地根据物品字典来得到相似度。下标给出了利用基于物品的方法寻找推荐的过程。这里不同于之前没有涉及所有评论者，而是给出了一个表格，对我们打过分和未打过分的影片进行了对比。如下表所示：<br><img src="http://d.pcs.baidu.com/thumbnail/d5f57848eeb97833b3db79511b87b3e1?fid=3441392098-250528-815072401901548&amp;time=1396782689&amp;rt=pr&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-%2B7fjrhzjlMN4nzhfaBUauqwKPYA%3D&amp;expires=8h&amp;prisign=amMwnVibYf88f2TB/V4FApSN5rJwOqzRd3VKNKTQ53AEKBJxWcpoyj96l6p65hrwJTMtBHDFE4x/3SKcGzuw+x45oLOM2ebDsA7W9Ml4qnqaYWCq8K+F5CgaPnWGDcoBrCDY1BGDvZpOdoN3ZQgE9dKfxiciRCca/tIS6DrqIid232pW9BdEEXBtrRUCrJk2HOV0gRi4YibT+Ql30Q8gVtb3Wm079R0xdwDR5mTCIRbDm0jOwJKo8uO15KBv3B7n&amp;r=453878984&amp;size=c850_u580&amp;quality=100" alt=""></p>
+<p>每一行列出了一部曾经看过的电影，以及对该电影的个人评价。对于每一部未看过的电影，相应有一列与已观看影片的相似度，通过评分与相似度相乘来获取未看影片的推荐值。总计一行给出了每部影片相似度的总计与推荐值得总计。为了预测我们对影片的评分情况，只要将R.x列的总计值除以相似度总计值即可。我们可以看出来我们再也不必为所有其他评论者计算相似度评价值，因为物品相似度数据集是已经事先构造好的，如上面的calculateSimilarItems方法计算所得，代码如下所示：</p>
+<h1 id="基于物品的相似度获取推荐物品">基于物品的相似度获取推荐物品</h1>
+<pre><code><span class="function"><span class="keyword">def</span> <span class="title">getRecommendedItems</span><span class="params">(prefs, itemMatch, user)</span>:</span>
+  userRatings=prefs[user]
+  scores={}
+  totalSim={}
+  <span class="comment"># Loop over items rated by this user</span>
+  <span class="comment"># 循环遍历由当前用户评分的物品</span>
+  <span class="keyword">for</span>(item, rating) <span class="keyword">in</span> userRatings.items():
+    <span class="comment"># Loop over items similar to this one</span>
+    <span class="comment"># 循环遍历与当前物品近似的物品</span>
+    <span class="keyword">for</span> (similarity,item2) <span class="keyword">in</span> itemMatch[item]:
+      <span class="comment"># Ignore if this user has already rated this item</span>
+      <span class="comment"># 忽略已经评价过的商品</span>
+      <span class="keyword">if</span> item2 <span class="keyword">in</span> userRatings:
+     <span class="keyword">continue</span>
+
+      scores.setdefault(item2,<span class="number">0</span>)
+      <span class="comment"># Weighted sum of rating times similarity</span>
+      <span class="comment"># 评价度与相似度加权之和</span>
+      scores[item2]+=similarity*rating
+
+      totalSim.setdefault(item2,<span class="number">0</span>)
+      <span class="comment"># Sum of all the similarities</span>
+      <span class="comment"># 全部相似度之和</span>
+      totalSim[item2]+=similarity
+
+  <span class="comment"># Divide each total score by total weighting to get an average</span>
+  <span class="comment"># 加权合计值除以加权和，求出平均值，即为预计评分</span>
+  rankings=[(score/totalSim[item],item) <span class="keyword">for</span> item,score <span class="keyword">in</span> scores.items( )]
+
+  <span class="comment"># Return the rankings from highest to lowest</span>
+  rankings.sort( )
+  rankings.reverse( )
+  <span class="keyword">return</span> rankings
+</code></pre><h3 id="跟我来实战1：">跟我来实战1：</h3>
+<p>学了这么多，该是那现实的数据练练手的时候了，我们使用的数据是来自于这个网站<a href="http://grouplens.org/datasets/movielens" target="_blank">MovLen</a>，<br>请大家下载10万的zip包即可。解压后里面有不少文件，但是我们只需要关心<strong>u.item</strong>和<strong>u.data</strong>，前者包含了一组影片id和影片信息的列表，后者则是包含如下形式（用户id、影片id、评分、评价时间）的实际评价情况：<br><img src="http://d.pcs.baidu.com/thumbnail/d8b9b4e021cb1e10a235feaee0a163f2?fid=3441392098-250528-73876278670023&amp;time=1396782689&amp;rt=pr&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-9IeitW%2FOyPDASLfmfzUYr0H5viE%3D&amp;expires=8h&amp;prisign=amMwnVibYf88f2TB/V4FApSN5rJwOqzRd3VKNKTQ53AEKBJxWcpoyj96l6p65hrwJTMtBHDFE4x/3SKcGzuw+x45oLOM2ebDsA7W9Ml4qnqaYWCq8K+F5CgaPnWGDcoBrCDY1BGDvZpOdoN3ZQgE9dKfxiciRCca/tIS6DrqIid232pW9BdEEXBtrRUCrJk2HOV0gRi4YibT+Ql30Q8gVtb3Wm079R0xdwDR5mTCIRbDm0jOwJKo8uO15KBv3B7n&amp;r=334333088&amp;size=c850_u580&amp;quality=100" alt=""></p>
+<p>该数据集包含了943位用户对1682部影片所做的评价，每位用户至少曾经为20部影片做过评价。那我们开始：</p>
+<h4 id="第一步_加载数据">第一步 加载数据</h4>
+<pre><code><span class="function"><span class="keyword">def</span> <span class="title">loadMovieLens</span><span class="params">(path=<span class="string">'/data/movielens'</span>)</span>:</span>
+  <span class="comment"># Get movie titles</span>
+  movies={}
+  <span class="keyword">for</span> line <span class="keyword">in</span> open(path+<span class="string">'/u.item'</span>):
+    (id,title)=line.split(<span class="string">'|'</span>)[<span class="number">0</span>:<span class="number">2</span>]
+    movies[id]=title
+
+  <span class="comment"># Load data</span>
+  prefs={}
+  <span class="keyword">for</span> line <span class="keyword">in</span> open(path+<span class="string">'/u.data'</span>):
+    (user,movieid,rating,ts)=line.split(<span class="string">'\t'</span>)
+    prefs.setdefault(user,{})
+    prefs[user][movies[movieid]]=float(rating)
+  <span class="keyword">return</span> prefs
+</code></pre><h4 id="第二步查看用户评分">第二步查看用户评分</h4>
+<pre><code>&gt;&gt;&gt; reload(recommendations)
+&lt;<span class="keyword">module</span> <span class="string">'recommendations'</span> from <span class="string">'recommendations.py'</span>&gt;
+&gt;&gt;&gt; prefs=recommendations.loadMovieLens()
+&gt;&gt;&gt; prefs[<span class="string">'87'</span>]
+{<span class="string">'Birdcage, The (1996)'</span>: <span class="number">4.0</span>, <span class="string">'E.T. the Extra-Terrestrial (1982)'</span>: <span class="number">3.0</span>, <span class="string">'Bananas
+ (1971)'</span>: <span class="number">5.0</span>, <span class="string">'Sting, The (1973)'</span>: <span class="number">5.0</span>, <span class="string">'Bad Boys (1995)'</span>: <span class="number">4.0</span>, <span class="string">'In the Line of
+ Fire (1993)'</span>: <span class="number">5.0</span>, <span class="string">'Star Trek: The Wrath of Khan (1982)'</span>: <span class="number">5.0</span>, <span class="string">'Speechless (199...
+... ...</span>
+</code></pre><p>第三步获取基于用户的推荐</p>
+<pre><code>&gt;&gt;&gt; recommendations.getRecommendations(prefs, '<span class="number">87</span>')[<span class="number">0</span>:<span class="number">10</span>]
+[(<span class="number">5.0</span>, <span class="attribute">'They</span> Made Me a Criminal (<span class="number">1939</span>)'), (<span class="number">5.0</span>, <span class="attribute">'Star</span> Kid (<span class="number">1997</span>)'), (<span class="number">5.0</span>, <span class="attribute">'Santa</span>
+ <span class="keyword">with</span> Muscles (<span class="number">1996</span>)'), (<span class="number">5.0</span>, <span class="attribute">'Saint</span> <span class="keyword">of</span> Fort Washington, The (<span class="number">1993</span>)'), (<span class="number">5.0</span>, <span class="attribute">'Ma</span>
+rlene Dietrich: Shadow <span class="keyword">and</span> Light (<span class="number">1996</span>) '), (<span class="number">5.0</span>, <span class="attribute">'Great</span> Day <span class="keyword">in</span> Harlem, A (<span class="number">1994</span>)
+'), (<span class="number">5.0</span>, <span class="attribute">'Entertaining</span> Angels: The Dorothy Day Story (<span class="number">1996</span>)'), (<span class="number">5.0</span>, <span class="attribute">'Boys</span>, Les
+ (<span class="number">1997</span>)'), (<span class="number">4.89884443128923</span>, <span class="attribute">'Legal</span> Deceit (<span class="number">1997</span>)'), (<span class="number">4.815019082242709</span>, <span class="attribute">'Lette</span>
+r From Death Row, A (<span class="number">1998</span>)')]
+</code></pre><p>第四步获取基于物品的推荐</p>
+<pre><code>&gt;&gt;&gt; itemsim=recommendations.calculateSimilarItems(prefs, n=<span class="number">50</span>)
+<span class="number">100</span> / <span class="number">1664</span>
+<span class="number">200</span> / <span class="number">1664</span>
+<span class="number">300</span> / <span class="number">1664</span>
+。。。
+&gt;&gt;&gt; recommendations.getRecommendedItems(prefs, itemsim, '<span class="number">87</span>')[<span class="number">0</span>:<span class="number">30</span>]
+[(<span class="number">5.0</span>, <span class="string">"What's Eating Gilbert Grape (1993)"</span>), (<span class="number">5.0</span>, <span class="attribute">'Vertigo</span> (<span class="number">1958</span>)'), (<span class="number">5.0</span>, <span class="attribute">'Us</span>
+ual Suspects, The (<span class="number">1995</span>)'), (<span class="number">5.0</span>, <span class="attribute">'Toy</span> Story (<span class="number">1995</span>)'), (<span class="number">5.0</span>, <span class="attribute">'Titanic</span> (<span class="number">1997</span>)'),
+(<span class="number">5.0</span>, <span class="attribute">'Sword</span> <span class="keyword">in</span> the Stone, The (<span class="number">1963</span>)'), (<span class="number">5.0</span>, <span class="attribute">'Stand</span> by Me (<span class="number">1986</span>)'), (<span class="number">5.0</span>, <span class="attribute">'Sli</span>
+ng Blade (<span class="number">1996</span>)'), (<span class="number">5.0</span>, <span class="attribute">'Silence</span> <span class="keyword">of</span> the Lambs, The (<span class="number">1991</span>)'), (<span class="number">5.0</span>, <span class="attribute">'Shining</span>, Th
+e (<span class="number">1980</span>)'), (<span class="number">5.0</span>, <span class="attribute">'Shine</span> (<span class="number">1996</span>)'), (<span class="number">5.0</span>, <span class="attribute">'Sense</span> <span class="keyword">and</span> Sensibility (<span class="number">1995</span>)'), (<span class="number">5.0</span>,
+<span class="attribute">'Scream</span> (<span class="number">1996</span>)'), (<span class="number">5.0</span>, <span class="attribute">'Rumble</span> <span class="keyword">in</span> the Bronx (<span class="number">1995</span>)'), (<span class="number">5.0</span>, <span class="attribute">'Rock</span>, The (<span class="number">1996</span>)')
+</code></pre><p>尽管物品相似度字典花费时间较长，但推荐过程中由于数据完全预先构造是瞬间完成，而且获取推荐所花费的时间不会随着用户数量增加而增加</p>
+<h3 id="基于用户过滤还是基于物品过滤">基于用户过滤还是基于物品过滤</h3>
+<p>在针对大数据集生成推荐列表时，基于物品进行过滤的方式明显要比基于用户的过滤更快，不过它有维护物品相似度表的额外开销。影评数据相对密集（影评人几乎对每部电影都做过评价），而delicious书签用户的数据可能就是稀疏的（大多数书签都分散在小众收藏夹），对于稀疏数据，基于物品的过滤方法通常优于基于用户过滤，而对于密集数据，则两者效果几乎一样。尽管如此，基于用户的过滤方法更加易于实现，而且没有额外步骤，因此他更适用于规模小的变化非常频繁的内存数据集。总之，告诉一些人存在一些人和自己偏好相近是有一定价值的。</p>
+<p>现在大家应该对相似度评价值的计算有所掌握，并且也应该清楚利用它们对用户和物品进行比较。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-04-06T10:44:58.000Z"><a href="/2014/04/06/machine_learning_1/">4月 6 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/04/06/machine_learning_1/">集体智慧编程系列-1.开篇</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>本人java出身，百度web攻城尸一枚，以为自己这一辈子都只和web对干，突然有一天被老大叫到小黑屋里后出来立马华丽丽地“转职”，变成了一枚当下很火的数据工程师，接手了电商项目的数据平台工作，这是人生第一次从无到有做一个项目，之前也从未接触，当时由于正好被升职，头脑热呼呼的，管她妈妈是谁就这么上了，干了个半年，体会到做数据还真的有点无聊，对应的pm也由于上面的决策没法推动产品，我这半年一直忙于工程很少掺和业务产品的事情，但是我是在一个业务研发部门搞基础建设一没这个资源和条件，二上面确实也不是最关心；那我怎么办，大家都说数据是黄金，我拿着黄金却不会花，我想哭啊想哭！古人云：书中自有黄金屋；那好去看书学习，在同事和网友们大力推荐下找到了一本书《集体智慧编程》，也就是我这一系列的源头所在，觉得我写的不给力，可以直接去找原文看看，</p>
+<p>说了以上的废话，就当是我阐述我看这本书的背景了，用以激起同路人（数据挖掘、机器学习小白）的共鸣，哈哈，那就进入开篇正题吧。</p>
+<hr>
+<h2 id="背景介绍">背景介绍</h2>
+<p><strong>Google</strong>和最近推出<em>纸牌屋</em>的<strong>Netflix</strong>这两家公司相比家喻户晓了，它们有什么共同之处？——算法先进牛叉！将来自不同人群的数据加以组合进而得出新结论并创造出新的商机，这种信息采集、以及对其加以解释的计算能力已经激发起了很多巨大的协作型商机，并且加深了对用户和顾客更好的理解。约会网站帮助人们更快地找他们好”机油“，预测机票价格的公司不断涌现，为了创造更有针对性的广告，每一个企业都想更好地了解他们顾客，这仅仅是<strong>集体智慧</strong>这一新兴领域的几个例子而已，层出不穷的新服务意味着每天都会有新的商机涌现。笔者绝对相信，理解机器学习和统计学在许多不同领域都会变得愈加重要（坚决抵制自卖自夸的无节操行为）</p>
+<h2 id="什么集体智慧？（Collective_Intelligence）">什么集体智慧？（Collective Intelligence）</h2>
+<p>通常的含义是为了创造新的想法，而将一群人的行为、偏好或思想组合在一起。集体智慧真正关注的是从独立的数据提供者那里得出新的结论。</p>
+<p>比如金融市场，价格并不是由某一个个体所决定，它由许多独立个体交易行为共同决定，大量的参与者根据他们对未来价格信息进行契约交易，这样的市场在价格预测效果方面，往往也被认为要比独立进行预测的专家们表现的更好，这是因为市场将知识、经验和成百上千人的意志组织在一起，形成了一种不依赖个人观点的预测。</p>
+<p>尽管集体智慧在Internet之前就已经存在，单自从有了Internet，从数千上万网民中搜集信息的能力为人们提供更多的可能，一直以来，人们都在利用Internet购买所需、搜索信息、需找娱乐等等，所有行为都在不需要你费力地被监控下来，你几乎毫无感觉，但是这些信息却可以组织到一起提取出新的价值。</p>
+<h2 id="什么是机器学习？">什么是机器学习？</h2>
+<p><strong>机器学习</strong>是人工智能AI（artificial intelligence）领域中与算法相关的子域，它允许计算机不断地进行学习。大多数情况下，这相当于将一组数据传递给算法，并由算法推断出与这些数据的属性相关的信息——借助这些信息，算法就能够预测出未来可能会出现的其他数据。这种预测是完全有可能的，因为几乎所有非随机数据中，都会包含这样或者那样的“模式”，这些模式的存在使机器得以据此进行归纳。为了实现归纳，机器会利用它所认定的出现于数据中的重要特征对数据进行“训练”，并借此得到一个模型。</p>
+<p>许多机器学习算法都倚仗数学与统计学，简单的相关性分析和回归都是机器学习的基本形式，本系列不是晦涩难懂的理论学习，笔者尽可能直观解释</p>
+<h3 id="机器学习的局限">机器学习的局限</h3>
+<p>机器学习算法受限于其在大量模式之上的归纳能力，而一个模式如果不同于算法先前曾见过的任何其他模式，那么它就很可能被“误解”。也就是说机器学习方法只能凭借已经见过的数据进行归纳，而且归纳的方式受到了很大的限制</p>
+<h3 id="来点真实生活">来点真实生活</h3>
+<p>像Google、Amazon、Netflix之流这里就不再给他们做广告了。就那市场预测来说，像刚才提及的<strong>金融市场</strong>，都是集体智慧的一种形式。我要说一个例子是关于<em>Hollywood Stock Exchange</em>，在那里人们可以进行涉及影片和影星的模拟股票交易。我们可以按照影片的当前价格买卖股票，其对应的价值相当于电影实际首映票房收入的百万分之一。因为价格是通过交易行为来设定的，所以价值不由任何个体所决定，这时该股票的价格其实就是整个群体对电影票房收入数字的预测，这种预测往往都优于某位专家给出的预测。</p>
+<h3 id="开篇总结">开篇总结</h3>
+<p>本系列不是新的知识，但是学习和掌握机器学习对自己未来的工作还是生活都是有益的，因为这是这个时代的大势所趋。下一篇是本系列的正文开篇，主题和大家一起实践<em>如何推荐商品</em></p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-04-05T14:51:17.000Z"><a href="/2014/04/05/markdow_init/">4月 5 2014</a></time>
       
       
@@ -235,42 +548,11 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-03-23T07:09:48.000Z"><a href="/2014/03/23/hello-world/">3月 23 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/03/23/hello-world/">Hello World</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>Welcome to <a href="http://zespia.tw/hexo" target="_blank">Hexo</a>! This is your very first post. Check <a href="http://zespia.tw/hexo/docs" target="_blank">documentation</a> to learn how to use.</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
+  
+    <a href="/page/2/" class="alignright next">下一页</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
@@ -289,6 +571,8 @@
   
     <li><a href="/categories/工具&技巧/">工具&amp;技巧</a><small>1</small></li>
   
+    <li><a href="/categories/机器学习/">机器学习</a><small>2</small></li>
+  
     <li><a href="/categories/编程开发/">编程开发</a><small>1</small></li>
   
   </ul>
@@ -299,7 +583,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/Markdown/" style="font-size: NaNpx;">Markdown</a><a href="/tags/PYTHON/" style="font-size: NaNpx;">PYTHON</a><a href="/tags/工具/" style="font-size: NaNpx;">工具</a><a href="/tags/编程技巧/" style="font-size: NaNpx;">编程技巧</a>
+    <a href="/tags/ClassicBook/" style="font-size: 20.00px;">ClassicBook</a><a href="/tags/MarhineLearning/" style="font-size: 20.00px;">MarhineLearning</a><a href="/tags/Markdown/" style="font-size: 10.00px;">Markdown</a><a href="/tags/PYTHON/" style="font-size: 10.00px;">PYTHON</a><a href="/tags/工具/" style="font-size: 10.00px;">工具</a><a href="/tags/编程技巧/" style="font-size: 10.00px;">编程技巧</a>
   </div>
 </div>
 

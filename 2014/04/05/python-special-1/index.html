@@ -6,7 +6,27 @@
   <title>【python特殊用法系列1】filter,map,reduce,lambda | Lufy&#39;s Great Route</title>
   <meta name="author" content="Monkey D Lufy Yang">
   
-  <meta name="description" content="看到这篇文章的人，想必都对python的各种诡谲技巧是又爱又恨，也都抱着掌握这些技巧，改善自己的生活，提升自己的境界；哈哈本文可能不能让大家这么快速做出改变，但可以让大家稍微见识一下python的几种特殊技巧和用法。这篇文章主要是介绍filter、map、reduce、lambda，后续还会继续该系">
+  <meta name="description" content="看到这篇文章的人，想必都对python的各种诡谲技巧是又爱又恨，也都抱着掌握这些技巧，改善自己的生活，提升自己的境界；哈哈本文可能不能让大家这么快速做出改变，但可以让大家稍微见识一下python的几种特殊技巧和用法。这篇文章主要是介绍filter、map、reduce、lambda，后续还会继续该系列主题的淬炼，废话不多说，进入主题。
+filter
+filter(function, sequence):
+对sequence中的item依次执行function(item)，将执行结果为True的item组成一个List/String/Tuple(取决于sequence类型）返回，示例如下：
+&gt;&gt;&gt; def f(x): return x % 2 != 0 and x % 3 != 0
+&gt;&gt;&gt; filter(f, range(2, 25))
+[5, 7, 11, 13, 17, 19, 23]
+&gt;&gt;&gt; def f(x): return x != &#39;a&#39;
+&gt;&gt;&gt; filter(f, &quot;abcdef&quot;)
+&#39;bcdef&#39;
+map
+map(function, sequence):
+对sequence中的item依次执行function（item），将执行结果组成一个List返回另外map也支持多个sequence，当然这也要求function支持相应数量的参数输入，示例如下：
+&gt;&gt;&gt; def cube(x): return x*x*x
+&gt;&gt;&gt; map(cube, range(1, 11))
+[1, 8, 27, 64, 125, 216, 343, 512, 729, 1000]
+&gt;&gt;&gt; def cube(x) : return x + x
+
+&gt;&gt;&gt; def add(x, y): return x+y
+&gt;&gt;&gt; map(add, range(8), range(8))
+[0, 2, 4, 6, 8, 10, 12, 14]">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -85,7 +105,8 @@
 <span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x, y)</span>:</span> <span class="keyword">return</span> x+y
 <span class="prompt">&gt;&gt;&gt; </span>map(add, range(<span class="number">8</span>), range(<span class="number">8</span>))
 [<span class="number">0</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">10</span>, <span class="number">12</span>, <span class="number">14</span>]
-</code></pre><h3 id="reduce">reduce</h3>
+</code></pre><p><a id="more"></a></p>
+<h3 id="reduce">reduce</h3>
 <h4 id="reduce（function，sequence，starting_value):">reduce（function，sequence，starting_value):</h4>
 <p>对sequence中的item顺序迭代调用function，如果有starting_value，还可以作为初始值调用，例如可以用来对List求和，示例如下：</p>
 <pre><code><span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x,y)</span>:</span> <span class="keyword">return</span> x + y

@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Cherish each other while moving on together! —— 且行且珍惜！]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2014-04-26T06:58:52.150Z</updated>
+  <updated>2014-04-27T08:25:58.156Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://yoursite.com/2014/04/06/machine_learning_2/"/>
     <id>http://yoursite.com/2014/04/06/machine_learning_2/</id>
     <published>2014-04-06T11:01:00.000Z</published>
-    <updated>2014-04-26T06:58:43.000Z</updated>
+    <updated>2014-04-27T08:24:55.000Z</updated>
     <content type="html"><![CDATA[<p>本章主要内容是教会大家【<em>如何根据群体偏好来给人们提供推荐</em>】，这些应用多如牛毛，我就不跟大家像书里那样废话一堆了(不好意思，作者大人），直接进入正题吧，嘻嘻!</p>
 <h3 id="协作型过滤">协作型过滤</h3>
 <p>一个协作型过滤算法通常的做法就是对一大群人进行搜索，并从中找出与我们品味相近的一小群人。算法会对这些人所偏爱的其他内容进行考察，并将它们组合起来构造出一个经过排名的推荐列表。</p>
@@ -45,8 +45,7 @@ critics={<span class="string">'Lisa Rose'</span>: {<span class="string">'Lady in
  <span class="string">'The Night Listener'</span>: <span class="number">3.0</span>, <span class="string">'Superman Returns'</span>: <span class="number">5.0</span>, <span class="string">'You, Me and Dupree'</span>: <span class="number">3.5</span>},
 <span class="string">'Toby'</span>: {<span class="string">'Snakes on a Plane'</span>:<span class="number">4.5</span>,<span class="string">'You, Me and Dupree'</span>:<span class="number">1.0</span>,<span class="string">'Superman         Returns'</span>:<span class="number">4.0</span>}}
 </code></pre><h3 id="寻找相近的用户">寻找相近的用户</h3>
-<p>搜集完人们的偏好数据之后，我们需要有一种方法来确定人们在品味方面的相似程度。为此，我们可以将每个人与所有其他人进行对比，并计算他们的相似度评价值。有若干种方法可以达到此目的，比如以下两套计算相似度评价值的体系：欧几里德距离和皮尔逊相关度。<br>关于欧几里德距离评价方法，它以经过人们一致评价的物品为坐标轴，然后将参与评价的人绘制到图上，并考察他们彼此间的距离远近，如下图所示：<br><img src="http://drp.io/files/534aada2ea491.png" alt=""></p>
-<p>两人在“偏好空间”中的距离越近，他们的兴趣偏好就越相似，因为这张图是二维，所以你只能看到两项评分，但这一规则对于更多数量的评分项而言是同样适用的。不过我们还需要一个函数来对偏好越相近的情况给出越大的值，为此我们可以将函数加1（避免遇到被0整除的错误），并取其倒数。如此我们就可以出一个计算相似度的函数：</p>
+<p>搜集完人们的偏好数据之后，我们需要有一种方法来确定人们在品味方面的相似程度。为此，我们可以将每个人与所有其他人进行对比，并计算他们的相似度评价值。有若干种方法可以达到此目的，比如以下两套计算相似度评价值的体系：欧几里德距离和皮尔逊相关度。<br>关于欧几里德距离评价方法，它以经过人们一致评价的物品为坐标轴，然后将参与评价的人绘制到图上，并考察他们彼此间的距离远近，如下图所示：<br><img src="http://drp.io/files/534aada2ea491.png" alt=""><br><a id="more"></a><br>两人在“偏好空间”中的距离越近，他们的兴趣偏好就越相似，因为这张图是二维，所以你只能看到两项评分，但这一规则对于更多数量的评分项而言是同样适用的。不过我们还需要一个函数来对偏好越相近的情况给出越大的值，为此我们可以将函数加1（避免遇到被0整除的错误），并取其倒数。如此我们就可以出一个计算相似度的函数：</p>
 <pre><code><span class="comment"># 返回一个有关person1和person2的基于距离的相似度评价</span>
 <span class="function"><span class="keyword">def</span> <span class="title">sim_distance</span><span class="params">(prefs,person1,person2)</span>:</span>
   <span class="comment"># Get the list of shared_items</span>
@@ -252,7 +251,32 @@ e (<span class="number">1980</span>)'), (<span class="number">5.0</span>, <span 
 <p>在针对大数据集生成推荐列表时，基于物品进行过滤的方式明显要比基于用户的过滤更快，不过它有维护物品相似度表的额外开销。影评数据相对密集（影评人几乎对每部电影都做过评价），而delicious书签用户的数据可能就是稀疏的（大多数书签都分散在小众收藏夹），对于稀疏数据，基于物品的过滤方法通常优于基于用户过滤，而对于密集数据，则两者效果几乎一样。尽管如此，基于用户的过滤方法更加易于实现，而且没有额外步骤，因此他更适用于规模小的变化非常频繁的内存数据集。总之，告诉一些人存在一些人和自己偏好相近是有一定价值的。</p>
 <p>现在大家应该对相似度评价值的计算有所掌握，并且也应该清楚利用它们对用户和物品进行比较。</p>
 ]]></content>
-    
+    <summary type="html"><![CDATA[<p>本章主要内容是教会大家【<em>如何根据群体偏好来给人们提供推荐</em>】，这些应用多如牛毛，我就不跟大家像书里那样废话一堆了(不好意思，作者大人），直接进入正题吧，嘻嘻!</p>
+<h3 id="协作型过滤">协作型过滤</h3>
+<p>一个协作型过滤算法通常的做法就是对一大群人进行搜索，并从中找出与我们品味相近的一小群人。算法会对这些人所偏爱的其他内容进行考察，并将它们组合起来构造出一个经过排名的推荐列表。</p>
+<h3 id="搜集偏好">搜集偏好</h3>
+<p>我们要做的第一件事就是寻找一种表达不同人及其偏好的方法。在python中，达到这一目的的一种非常简单的方法是使用一个嵌套的字典。</p>
+<pre><code><span class="preprocessor"># 这是一个字典结构表示每个影评人对所看电影的评分情况，后续所有</span>
+<span class="preprocessor">#计算均基于该数据</span>
+critics={<span class="string">'Lisa Rose'</span>: {<span class="string">'Lady in the Water'</span>: <span class="number">2.5</span>, <span class="string">'Snakes on a Plane'</span>: <span class="number">3.5</span>,
+ <span class="string">'Just My Luck'</span>: <span class="number">3.0</span>, <span class="string">'Superman Returns'</span>: <span class="number">3.5</span>, <span class="string">'You, Me and Dupree'</span>: <span class="number">2.5</span>,
+ <span class="string">'The Night Listener'</span>: <span class="number">3.0</span>},
+<span class="string">'Gene Seymour'</span>: {<span class="string">'Lady in the Water'</span>: <span class="number">3.0</span>, <span class="string">'Snakes on a Plane'</span>: <span class="number">3.5</span>,
+ <span class="string">'Just My Luck'</span>: <span class="number">1.5</span>, <span class="string">'Superman Returns'</span>: <span class="number">5.0</span>, <span class="string">'The Night Listener'</span>: <span class="number">3.0</span>,
+ <span class="string">'You, Me and Dupree'</span>: <span class="number">3.5</span>},
+<span class="string">'Michael Phillips'</span>: {<span class="string">'Lady in the Water'</span>: <span class="number">2.5</span>, <span class="string">'Snakes on a Plane'</span>: <span class="number">3.0</span>,
+ <span class="string">'Superman Returns'</span>: <span class="number">3.5</span>, <span class="string">'The Night Listener'</span>: <span class="number">4.0</span>},
+<span class="string">'Claudia Puig'</span>: {<span class="string">'Snakes on a Plane'</span>: <span class="number">3.5</span>, <span class="string">'Just My Luck'</span>: <span class="number">3.0</span>,
+ <span class="string">'The Night Listener'</span>: <span class="number">4.5</span>, <span class="string">'Superman Returns'</span>: <span class="number">4.0</span>,
+ <span class="string">'You, Me and Dupree'</span>: <span class="number">2.5</span>},
+<span class="string">'Mick LaSalle'</span>: {<span class="string">'Lady in the Water'</span>: <span class="number">3.0</span>, <span class="string">'Snakes on a Plane'</span>: <span class="number">4.0</span>,
+ <span class="string">'Just My Luck'</span>: <span class="number">2.0</span>, <span class="string">'Superman Returns'</span>: <span class="number">3.0</span>, <span class="string">'The Night Listener'</span>: <span class="number">3.0</span>,
+ <span class="string">'You, Me and Dupree'</span>: <span class="number">2.0</span>},
+<span class="string">'Jack Matthews'</span>: {<span class="string">'Lady in the Water'</span>: <span class="number">3.0</span>, <span class="string">'Snakes on a Plane'</span>: <span class="number">4.0</span>,
+ <span class="string">'The Night Listener'</span>: <span class="number">3.0</span>, <span class="string">'Superman Returns'</span>: <span class="number">5.0</span>, <span class="string">'You, Me and Dupree'</span>: <span class="number">3.5</span>},
+<span class="string">'Toby'</span>: {<span class="string">'Snakes on a Plane'</span>:<span class="number">4.5</span>,<span class="string">'You, Me and Dupree'</span>:<span class="number">1.0</span>,<span class="string">'Superman         Returns'</span>:<span class="number">4.0</span>}}
+</code></pre><h3 id="寻找相近的用户">寻找相近的用户</h3>
+<p>搜集完人们的偏好数据之后，我们需要有一种方法来确定人们在品味方面的相似程度。为此，我们可以将每个人与所有其他人进行对比，并计算他们的相似度评价值。有若干种方法可以达到此目的，比如以下两套计算相似度评价值的体系：欧几里德距离和皮尔逊相关度。<br>关于欧几里德距离评价方法，它以经过人们一致评价的物品为坐标轴，然后将参与评价的人绘制到图上，并考察他们彼此间的距离远近，如下图所示：<br><img src="http://drp.io/files/534aada2ea491.png" alt=""><br>]]></summary>
     
       <category term="MarhineLearning" scheme="http://yoursite.com/tags/MarhineLearning/"/>
     
@@ -267,7 +291,7 @@ e (<span class="number">1980</span>)'), (<span class="number">5.0</span>, <span 
     <link href="http://yoursite.com/2014/04/06/machine_learning_1/"/>
     <id>http://yoursite.com/2014/04/06/machine_learning_1/</id>
     <published>2014-04-06T10:44:58.000Z</published>
-    <updated>2014-04-06T10:52:13.000Z</updated>
+    <updated>2014-04-27T08:24:55.000Z</updated>
     <content type="html"><![CDATA[<p>本人java出身，百度web攻城尸一枚，以为自己这一辈子都只和web对干，突然有一天被老大叫到小黑屋里后出来立马华丽丽地“转职”，变成了一枚当下很火的数据工程师，接手了电商项目的数据平台工作，这是人生第一次从无到有做一个项目，之前也从未接触，当时由于正好被升职，头脑热呼呼的，管她妈妈是谁就这么上了，干了个半年，体会到做数据还真的有点无聊，对应的pm也由于上面的决策没法推动产品，我这半年一直忙于工程很少掺和业务产品的事情，但是我是在一个业务研发部门搞基础建设一没这个资源和条件，二上面确实也不是最关心；那我怎么办，大家都说数据是黄金，我拿着黄金却不会花，我想哭啊想哭！古人云：书中自有黄金屋；那好去看书学习，在同事和网友们大力推荐下找到了一本书《集体智慧编程》，也就是我这一系列的源头所在，觉得我写的不给力，可以直接去找原文看看，</p>
 <p>说了以上的废话，就当是我阐述我看这本书的背景了，用以激起同路人（数据挖掘、机器学习小白）的共鸣，哈哈，那就进入开篇正题吧。</p>
 <hr>
@@ -276,7 +300,7 @@ e (<span class="number">1980</span>)'), (<span class="number">5.0</span>, <span 
 <h2 id="什么集体智慧？（Collective_Intelligence）">什么集体智慧？（Collective Intelligence）</h2>
 <p>通常的含义是为了创造新的想法，而将一群人的行为、偏好或思想组合在一起。集体智慧真正关注的是从独立的数据提供者那里得出新的结论。</p>
 <p>比如金融市场，价格并不是由某一个个体所决定，它由许多独立个体交易行为共同决定，大量的参与者根据他们对未来价格信息进行契约交易，这样的市场在价格预测效果方面，往往也被认为要比独立进行预测的专家们表现的更好，这是因为市场将知识、经验和成百上千人的意志组织在一起，形成了一种不依赖个人观点的预测。</p>
-<p>尽管集体智慧在Internet之前就已经存在，单自从有了Internet，从数千上万网民中搜集信息的能力为人们提供更多的可能，一直以来，人们都在利用Internet购买所需、搜索信息、需找娱乐等等，所有行为都在不需要你费力地被监控下来，你几乎毫无感觉，但是这些信息却可以组织到一起提取出新的价值。</p>
+<p>尽管集体智慧在Internet之前就已经存在，单自从有了Internet，从数千上万网民中搜集信息的能力为人们提供更多的可能，一直以来，人们都在利用Internet购买所需、搜索信息、需找娱乐等等，所有行为都在不需要你费力地被监控下来，你几乎毫无感觉，但是这些信息却可以组织到一起提取出新的价值。<br><a id="more"></a></p>
 <h2 id="什么是机器学习？">什么是机器学习？</h2>
 <p><strong>机器学习</strong>是人工智能AI（artificial intelligence）领域中与算法相关的子域，它允许计算机不断地进行学习。大多数情况下，这相当于将一组数据传递给算法，并由算法推断出与这些数据的属性相关的信息——借助这些信息，算法就能够预测出未来可能会出现的其他数据。这种预测是完全有可能的，因为几乎所有非随机数据中，都会包含这样或者那样的“模式”，这些模式的存在使机器得以据此进行归纳。为了实现归纳，机器会利用它所认定的出现于数据中的重要特征对数据进行“训练”，并借此得到一个模型。</p>
 <p>许多机器学习算法都倚仗数学与统计学，简单的相关性分析和回归都是机器学习的基本形式，本系列不是晦涩难懂的理论学习，笔者尽可能直观解释</p>
@@ -287,7 +311,15 @@ e (<span class="number">1980</span>)'), (<span class="number">5.0</span>, <span 
 <h3 id="开篇总结">开篇总结</h3>
 <p>本系列不是新的知识，但是学习和掌握机器学习对自己未来的工作还是生活都是有益的，因为这是这个时代的大势所趋。下一篇是本系列的正文开篇，主题和大家一起实践<em>如何推荐商品</em></p>
 ]]></content>
-    
+    <summary type="html"><![CDATA[<p>本人java出身，百度web攻城尸一枚，以为自己这一辈子都只和web对干，突然有一天被老大叫到小黑屋里后出来立马华丽丽地“转职”，变成了一枚当下很火的数据工程师，接手了电商项目的数据平台工作，这是人生第一次从无到有做一个项目，之前也从未接触，当时由于正好被升职，头脑热呼呼的，管她妈妈是谁就这么上了，干了个半年，体会到做数据还真的有点无聊，对应的pm也由于上面的决策没法推动产品，我这半年一直忙于工程很少掺和业务产品的事情，但是我是在一个业务研发部门搞基础建设一没这个资源和条件，二上面确实也不是最关心；那我怎么办，大家都说数据是黄金，我拿着黄金却不会花，我想哭啊想哭！古人云：书中自有黄金屋；那好去看书学习，在同事和网友们大力推荐下找到了一本书《集体智慧编程》，也就是我这一系列的源头所在，觉得我写的不给力，可以直接去找原文看看，</p>
+<p>说了以上的废话，就当是我阐述我看这本书的背景了，用以激起同路人（数据挖掘、机器学习小白）的共鸣，哈哈，那就进入开篇正题吧。</p>
+<hr>
+<h2 id="背景介绍">背景介绍</h2>
+<p><strong>Google</strong>和最近推出<em>纸牌屋</em>的<strong>Netflix</strong>这两家公司相比家喻户晓了，它们有什么共同之处？——算法先进牛叉！将来自不同人群的数据加以组合进而得出新结论并创造出新的商机，这种信息采集、以及对其加以解释的计算能力已经激发起了很多巨大的协作型商机，并且加深了对用户和顾客更好的理解。约会网站帮助人们更快地找他们好”机油“，预测机票价格的公司不断涌现，为了创造更有针对性的广告，每一个企业都想更好地了解他们顾客，这仅仅是<strong>集体智慧</strong>这一新兴领域的几个例子而已，层出不穷的新服务意味着每天都会有新的商机涌现。笔者绝对相信，理解机器学习和统计学在许多不同领域都会变得愈加重要（坚决抵制自卖自夸的无节操行为）</p>
+<h2 id="什么集体智慧？（Collective_Intelligence）">什么集体智慧？（Collective Intelligence）</h2>
+<p>通常的含义是为了创造新的想法，而将一群人的行为、偏好或思想组合在一起。集体智慧真正关注的是从独立的数据提供者那里得出新的结论。</p>
+<p>比如金融市场，价格并不是由某一个个体所决定，它由许多独立个体交易行为共同决定，大量的参与者根据他们对未来价格信息进行契约交易，这样的市场在价格预测效果方面，往往也被认为要比独立进行预测的专家们表现的更好，这是因为市场将知识、经验和成百上千人的意志组织在一起，形成了一种不依赖个人观点的预测。</p>
+<p>尽管集体智慧在Internet之前就已经存在，单自从有了Internet，从数千上万网民中搜集信息的能力为人们提供更多的可能，一直以来，人们都在利用Internet购买所需、搜索信息、需找娱乐等等，所有行为都在不需要你费力地被监控下来，你几乎毫无感觉，但是这些信息却可以组织到一起提取出新的价值。<br>]]></summary>
     
       <category term="MarhineLearning" scheme="http://yoursite.com/tags/MarhineLearning/"/>
     
@@ -302,7 +334,7 @@ e (<span class="number">1980</span>)'), (<span class="number">5.0</span>, <span 
     <link href="http://yoursite.com/2014/04/05/markdow_init/"/>
     <id>http://yoursite.com/2014/04/05/markdow_init/</id>
     <published>2014-04-05T14:51:17.000Z</published>
-    <updated>2014-04-05T16:05:58.000Z</updated>
+    <updated>2014-04-27T08:24:55.000Z</updated>
     <content type="html"><![CDATA[<p>首先大家不要因为标题拍我，也不要无端黑我，以下内容不是我原创的，也是从网上众多的指南中淬炼而来，至少我看了后5分钟，基本搞定了mardown基本用法，以我的智商，想必大家3分钟就全搞定了，好处不用我多说，直接上菜了。</p>
 <h2 id="第一步">第一步</h2>
 <p>当然找一个编辑器来用Markdown写作了，给大家隆重推荐——简书</p>
@@ -322,7 +354,7 @@ e (<span class="number">1980</span>)'), (<span class="number">5.0</span>, <span 
 <span class="preprocessor">##### 五级标题</span>
 <span class="preprocessor">###### 六级标题</span>
 </code></pre><p><em>【注意】</em> <strong>#</strong>和“标题内容”之间建议保留一个空格，这是最标准的Markdown写法。<br>如下图所示：</p>
-<p><img src="http://ww4.sinaimg.cn/large/687afc7fjw1dzs5crii94j.jpg" alt=""></p>
+<p><img src="http://ww4.sinaimg.cn/large/687afc7fjw1dzs5crii94j.jpg" alt=""><br><a id="more"></a></p>
 <h3 id="列表">列表</h3>
 <p>列表格式也很常用，在 Markdown 中，你只需要在文字前面加上 - 就可以了，例如：</p>
 <pre><code>-<span class="ruby"> 文本<span class="number">1</span>
@@ -357,7 +389,26 @@ e (<span class="number">1980</span>)'), (<span class="number">5.0</span>, <span 
 <p>如果还需要跟进一步的使用，请移驾到这里——<a href="http://wowubuntu.com/markdown/" target="_blank">Markdown语法说明</a></p>
 <p>大家是不是会用了呢，如果还有不懂的地方，可以直接留言，我会及时答复，谢谢！</p>
 ]]></content>
-    
+    <summary type="html"><![CDATA[<p>首先大家不要因为标题拍我，也不要无端黑我，以下内容不是我原创的，也是从网上众多的指南中淬炼而来，至少我看了后5分钟，基本搞定了mardown基本用法，以我的智商，想必大家3分钟就全搞定了，好处不用我多说，直接上菜了。</p>
+<h2 id="第一步">第一步</h2>
+<p>当然找一个编辑器来用Markdown写作了，给大家隆重推荐——简书</p>
+<ol>
+<li>注册并登录 <a href="http://jianshu.io" target="_blank">简书</a><br>【ps：本人不是简书的哦，只是觉得这个当作Markdown的在线编辑器，用起来挺爽，而且里面的一些文章还很不错，算是一举两得，一箭双雕】</li>
+<li>点击页面左侧的“写文章”，进入编辑后，新建一篇笔记，然后关键步骤来了，编辑器右上角有一个<strong>预览模式</strong>按钮，点击进入后，你就可以一边写Markdown，一边预览到实际效果了，大赞啊！</li>
+</ol>
+<p><img src="http://ww2.sinaimg.cn/large/687afc7fjw1dzs642j2qoj.jpg" alt=""></p>
+<h2 id="第二步">第二步</h2>
+<p>工具有了，我们就可以开始Markdown之旅了，大家跟上，重点来了</p>
+<h3 id="标题">标题</h3>
+<p>这是最为常用的格式，在平时常用的的文本编辑器中大多是这样实现的：输入文本、选中文本、设置标题格式。在 Markdown 中，你只需要在文本前面加上<strong>#</strong>     即可，同理、你还可以增加二级标题、三级标题、四级标题、五级标题和六级标题，总共六级，只需要增加 <strong>#</strong> 即可，标题字号相应降低。例如：</p>
+<pre><code><span class="preprocessor"># 一级标题</span>
+<span class="preprocessor">## 二级标题</span>
+<span class="preprocessor">### 三级标题</span>
+<span class="preprocessor">#### 四级标题</span>
+<span class="preprocessor">##### 五级标题</span>
+<span class="preprocessor">###### 六级标题</span>
+</code></pre><p><em>【注意】</em> <strong>#</strong>和“标题内容”之间建议保留一个空格，这是最标准的Markdown写法。<br>如下图所示：</p>
+<p><img src="http://ww4.sinaimg.cn/large/687afc7fjw1dzs5crii94j.jpg" alt=""><br>]]></summary>
     
       <category term="Markdown" scheme="http://yoursite.com/tags/Markdown/"/>
     
@@ -372,7 +423,7 @@ e (<span class="number">1980</span>)'), (<span class="number">5.0</span>, <span 
     <link href="http://yoursite.com/2014/04/05/python-special-1/"/>
     <id>http://yoursite.com/2014/04/05/python-special-1/</id>
     <published>2014-04-05T08:32:21.000Z</published>
-    <updated>2014-04-05T13:32:41.000Z</updated>
+    <updated>2014-04-27T08:24:55.000Z</updated>
     <content type="html"><![CDATA[<p>看到这篇文章的人，想必都对python的各种诡谲技巧是又爱又恨，也都抱着掌握这些技巧，改善自己的生活，提升自己的境界；哈哈本文可能不能让大家这么快速做出改变，但可以让大家稍微见识一下python的几种特殊技巧和用法。这篇文章主要是介绍filter、map、reduce、lambda，后续还会继续该系列主题的淬炼，废话不多说，进入主题。</p>
 <h3 id="filter">filter</h3>
 <h4 id="filter(function,_sequence):">filter(function, sequence):</h4>
@@ -394,7 +445,8 @@ e (<span class="number">1980</span>)'), (<span class="number">5.0</span>, <span 
 <span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x, y)</span>:</span> <span class="keyword">return</span> x+y
 <span class="prompt">&gt;&gt;&gt; </span>map(add, range(<span class="number">8</span>), range(<span class="number">8</span>))
 [<span class="number">0</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">10</span>, <span class="number">12</span>, <span class="number">14</span>]
-</code></pre><h3 id="reduce">reduce</h3>
+</code></pre><p><a id="more"></a></p>
+<h3 id="reduce">reduce</h3>
 <h4 id="reduce（function，sequence，starting_value):">reduce（function，sequence，starting_value):</h4>
 <p>对sequence中的item顺序迭代调用function，如果有starting_value，还可以作为初始值调用，例如可以用来对List求和，示例如下：</p>
 <pre><code><span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x,y)</span>:</span> <span class="keyword">return</span> x + y
@@ -413,7 +465,28 @@ e (<span class="number">1980</span>)'), (<span class="number">5.0</span>, <span 
 <pre><code>&gt;&gt;&gt;kmpathes = <span class="built_in">filter</span>(lambda kmpath: kmpath, map(lambda kmpath: <span class="keyword">string</span>.strip(kmpath), <span class="keyword">string</span>.<span class="built_in">split</span>(l, <span class="string">':'</span>)))
 </code></pre><p>看起来麻烦，其实就像用语言来描述问题一样，非常优雅。对 l 中的所有元素以’:’做分割，得出一个列表。对这个列表的每一个元素做字符串strip，形成一个列表。对这个列表的每一个元素做直接返回操作(这个地方可以加上过滤条件限制)，最终获得一个字符串被’:’分割的列表，列表中的每一个字符串都做了strip，并可以对特殊字符串过滤。</p>
 ]]></content>
-    
+    <summary type="html"><![CDATA[<p>看到这篇文章的人，想必都对python的各种诡谲技巧是又爱又恨，也都抱着掌握这些技巧，改善自己的生活，提升自己的境界；哈哈本文可能不能让大家这么快速做出改变，但可以让大家稍微见识一下python的几种特殊技巧和用法。这篇文章主要是介绍filter、map、reduce、lambda，后续还会继续该系列主题的淬炼，废话不多说，进入主题。</p>
+<h3 id="filter">filter</h3>
+<h4 id="filter(function,_sequence):">filter(function, sequence):</h4>
+<p>对sequence中的item依次执行function(item)，将执行结果为True的item组成一个List/String/Tuple(取决于sequence类型）返回，示例如下：</p>
+<pre><code><span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span> <span class="keyword">return</span> x % <span class="number">2</span> != <span class="number">0</span> <span class="keyword">and</span> x % <span class="number">3</span> != <span class="number">0</span>
+<span class="prompt">&gt;&gt;&gt; </span>filter(f, range(<span class="number">2</span>, <span class="number">25</span>))
+[<span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>, <span class="number">17</span>, <span class="number">19</span>, <span class="number">23</span>]
+<span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span> <span class="keyword">return</span> x != <span class="string">'a'</span>
+<span class="prompt">&gt;&gt;&gt; </span>filter(f, <span class="string">"abcdef"</span>)
+<span class="string">'bcdef'</span>
+</code></pre><h3 id="map">map</h3>
+<h4 id="map(function,_sequence):">map(function, sequence):</h4>
+<p>对sequence中的item依次执行function（item），将执行结果组成一个List返回<br>另外map也支持多个sequence，当然这也要求function支持相应数量的参数输入，示例如下：</p>
+<pre><code><span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">cube</span><span class="params">(x)</span>:</span> <span class="keyword">return</span> x*x*x
+<span class="prompt">&gt;&gt;&gt; </span>map(cube, range(<span class="number">1</span>, <span class="number">11</span>))
+[<span class="number">1</span>, <span class="number">8</span>, <span class="number">27</span>, <span class="number">64</span>, <span class="number">125</span>, <span class="number">216</span>, <span class="number">343</span>, <span class="number">512</span>, <span class="number">729</span>, <span class="number">1000</span>]
+<span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">cube</span><span class="params">(x)</span> :</span> <span class="keyword">return</span> x + x
+
+<span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x, y)</span>:</span> <span class="keyword">return</span> x+y
+<span class="prompt">&gt;&gt;&gt; </span>map(add, range(<span class="number">8</span>), range(<span class="number">8</span>))
+[<span class="number">0</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">10</span>, <span class="number">12</span>, <span class="number">14</span>]
+</code></pre><p>]]></summary>
     
       <category term="PYTHON" scheme="http://yoursite.com/tags/PYTHON/"/>
     

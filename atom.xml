@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Cherish each other while moving on together! —— 且行且珍惜！]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2014-06-01T15:37:50.614Z</updated>
+  <updated>2014-06-01T15:40:24.514Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://yoursite.com/2014/06/01/redis_newer/"/>
     <id>http://yoursite.com/2014/06/01/redis_newer/</id>
     <published>2014-06-01T15:16:19.000Z</published>
-    <updated>2014-06-01T15:34:21.000Z</updated>
+    <updated>2014-06-01T15:40:17.000Z</updated>
     <content type="html"><![CDATA[<h4 id="概述：">概述：</h4>
 <p><strong>Redis</strong> 是一个 Key-Value 存储系统。和 Memcached 类似，它支持存储的 value 类型相对更多，包括 string(字符串)、 list(链表)、 set(集合)和 zset(有序集合)。这些数据类型都支持 push/pop、add/remove 及取交集并集和差集及更丰富的操作，而且这些操作都是原子性的。在此基础上，Redis 支持各种不同方式的排序。与 memcached 一样，为了保证效率，数据都是缓存在内存中。区别的是 Redis 会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，并且在此基础上实现了 master-slave(主从)同步。</p>
 <h4 id="Key-Value存储系统">Key-Value存储系统</h4>
@@ -29,7 +29,7 @@
 <li>大规模互联网应用<br>一类是仍然采用RDBMS，然后通过对数据库的垂直和水平切分将整个数据库部署到一个集群上，缺点在于它是针对特定应用，通用型不足<br>另一类就是google采用的方法，抛弃RDBMS，采用Key-Value形式存储，这样可以极大增强系统的可扩展性。</li>
 <li>云存储<br>如果说上一个问题还有可以替代的解决方案（切割数据库）的话，那么对于云存储来说，也许 key-value 的 store 就是唯一的解决方案了。云存储简单点说就是构建一个大型的存储平台给别人用，这也就意味着在这上面运行的应用其实是不可控的。如果其中某个客户的应用随着用户的增长而不断增长时，云存储供应商是没有办法通过数据库的切割来达到 scale 的，因为这个数据是客户的，供应商不了解这个数据自然就没法作出切割。在这种情况下，key-value 的 store 就是唯一的选择了，因为这种条件下的 scalability 必须是自动完成的，不能有人工干预。这也是为什么几乎所有的现有的云存储都是 key-value 形式的，例如 Amazon的 smipleDB，底层实现就是 key-value，还有 google 的  GoogleAppEngine，采用的是 BigTable的存储形式。</li>
 </ol>
-<p><em>Key-Value Store</em> 最大的特点就是它的可扩展性，这也就是它最大的优势。所谓的可扩展性，<br>在我看来这里包括了两方面内容。一方面，是指 Key-Value Store 可以支持极大的数据的存储，它的分布式的架构决定了只要有更多的机器，就能够保证存储更多的数据。另一方面，是指它可以支持数量很多的并发的查询。对于 RDBMS，一般几百个并发的查询就可以让它很吃<br>力了，而一个 Key-Value Store，可以很轻松的支持上千的并发查询。下面而简单的罗列了一些特点：<br>  Key-value store：一个  key-value  数据存储系统，只支持一些基本操作，如： SET(key, value) 和  GET(key)  等；<br>  分布式：多台机器（nodes）同时存储数据和状态，彼此交换消息来保持数据一致，可视为一个完整的存储系统。<br>  数据一致：所有机器上的数据都是同步更新的、不用担心得到不一致的结果；<br>  冗余：所有机器（nodes）保存相同的数据，整个系统的存储能力取决于单台机器（node）的能力；<br>  容错：如果有少数  nodes  出错，比如重启、当机、断网、网络丢包等各种  fault/fail  都不影响整个系统的运行；<br>  高可靠性：容错、冗余等保证了数据库系统的可靠性。</p>
+<p><em>Key-Value Store</em> 最大的特点就是它的可扩展性，这也就是它最大的优势。所谓的可扩展性，<br>在我看来这里包括了两方面内容。一方面，是指 Key-Value Store 可以支持极大的数据的存储，它的分布式的架构决定了只要有更多的机器，就能够保证存储更多的数据。另一方面，是指它可以支持数量很多的并发的查询。对于 RDBMS，一般几百个并发的查询就可以让它很吃<br>力了，而一个 Key-Value Store，可以很轻松的支持上千的并发查询。下面而简单的罗列了一些特点：<br>  Key-value store：一个  key-value  数据存储系统，只支持一些基本操作，如： SET(key, value) 和  GET(key)  等；<br>  分布式：多台机器（nodes）同时存储数据和状态，彼此交换消息来保持数据一致，可视为一个完整的存储系统。<br>  数据一致：所有机器上的数据都是同步更新的、不用担心得到不一致的结果；<br>  冗余：所有机器（nodes）保存相同的数据，整个系统的存储能力取决于单台机器（node）的能力；<br>  容错：如果有少数  nodes  出错，比如重启、当机、断网、网络丢包等各种  fault/fail  都不影响整个系统的运行；<br>  高可靠性：容错、冗余等保证了数据库系统的可靠性。<br><a id="more"></a></p>
 <h4 id="初识Redis">初识Redis</h4>
 <p>Redis是一个开源的使用ANSI C语言编写，支持网络、可基于内存且可持久化的日志型、Key-Value数据库，并且提供多个语言的API，访问十分便捷。</p>
 <h4 id="Redis数据类型：">Redis数据类型：</h4>
@@ -77,7 +77,16 @@
 <p>PS： Redis作者antirez曾笑称Redis为一个数据结构服务器，我认为这个还是挺准确的，Redis的所有功能就是将数据以其固有的几种结构来保存，并提供给用户操作这几种结构的接口。</p>
 <p>redis：<a href="http://redis.io/" target="_blank">官方传送门</a><br>redis中文：<a href="http://www.redis.cn/" target="_blank">中文传送门</a></p>
 ]]></content>
-    
+    <summary type="html"><![CDATA[<h4 id="概述：">概述：</h4>
+<p><strong>Redis</strong> 是一个 Key-Value 存储系统。和 Memcached 类似，它支持存储的 value 类型相对更多，包括 string(字符串)、 list(链表)、 set(集合)和 zset(有序集合)。这些数据类型都支持 push/pop、add/remove 及取交集并集和差集及更丰富的操作，而且这些操作都是原子性的。在此基础上，Redis 支持各种不同方式的排序。与 memcached 一样，为了保证效率，数据都是缓存在内存中。区别的是 Redis 会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，并且在此基础上实现了 master-slave(主从)同步。</p>
+<h4 id="Key-Value存储系统">Key-Value存储系统</h4>
+<p>Key-Value Store 是当下比较流行的话题，尤其在构建诸如搜索引擎、IM、P2P、游戏服务器、SNS 等大型互联网应用以及提供云计算服务的时候，怎样保证系统在海量数据环境下的高性能、高可靠性、高扩展性、高可用性、低成本成为所有系统架构们挖苦心思考虑的重点，而<br>怎样解决数据库服务器的性能瓶颈是最大的挑战。<br>Key-Value Store 更加注重对海量数据存取的性能、分布式、扩展性支持上，并不需要传统关系数据库的一些特征，例如：Schema、事务、完整 SQL 查询支持等等，因此在分布式环境下的性能相对于传统的关系数据库有较大的提升。</p>
+<h4 id="为什么要选择Key-Value_Store">为什么要选择Key-Value Store</h4>
+<ol>
+<li>大规模互联网应用<br>一类是仍然采用RDBMS，然后通过对数据库的垂直和水平切分将整个数据库部署到一个集群上，缺点在于它是针对特定应用，通用型不足<br>另一类就是google采用的方法，抛弃RDBMS，采用Key-Value形式存储，这样可以极大增强系统的可扩展性。</li>
+<li>云存储<br>如果说上一个问题还有可以替代的解决方案（切割数据库）的话，那么对于云存储来说，也许 key-value 的 store 就是唯一的解决方案了。云存储简单点说就是构建一个大型的存储平台给别人用，这也就意味着在这上面运行的应用其实是不可控的。如果其中某个客户的应用随着用户的增长而不断增长时，云存储供应商是没有办法通过数据库的切割来达到 scale 的，因为这个数据是客户的，供应商不了解这个数据自然就没法作出切割。在这种情况下，key-value 的 store 就是唯一的选择了，因为这种条件下的 scalability 必须是自动完成的，不能有人工干预。这也是为什么几乎所有的现有的云存储都是 key-value 形式的，例如 Amazon的 smipleDB，底层实现就是 key-value，还有 google 的  GoogleAppEngine，采用的是 BigTable的存储形式。</li>
+</ol>
+<p><em>Key-Value Store</em> 最大的特点就是它的可扩展性，这也就是它最大的优势。所谓的可扩展性，<br>在我看来这里包括了两方面内容。一方面，是指 Key-Value Store 可以支持极大的数据的存储，它的分布式的架构决定了只要有更多的机器，就能够保证存储更多的数据。另一方面，是指它可以支持数量很多的并发的查询。对于 RDBMS，一般几百个并发的查询就可以让它很吃<br>力了，而一个 Key-Value Store，可以很轻松的支持上千的并发查询。下面而简单的罗列了一些特点：<br>  Key-value store：一个  key-value  数据存储系统，只支持一些基本操作，如： SET(key, value) 和  GET(key)  等；<br>  分布式：多台机器（nodes）同时存储数据和状态，彼此交换消息来保持数据一致，可视为一个完整的存储系统。<br>  数据一致：所有机器上的数据都是同步更新的、不用担心得到不一致的结果；<br>  冗余：所有机器（nodes）保存相同的数据，整个系统的存储能力取决于单台机器（node）的能力；<br>  容错：如果有少数  nodes  出错，比如重启、当机、断网、网络丢包等各种  fault/fail  都不影响整个系统的运行；<br>  高可靠性：容错、冗余等保证了数据库系统的可靠性。<br>]]></summary>
     
       <category term="Big Data" scheme="http://yoursite.com/tags/Big%20Data/"/>
     

@@ -3,13 +3,16 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Lufy&#39;s Great Route</title>
+  <title>告诉你Redis是一个牛逼货 | Lufy&#39;s Great Route</title>
   <meta name="author" content="Monkey D Lufy Yang">
+  
+  <meta name="description" content="概述：
+Redis 是一个 Key-Value 存储系统。和 Memcached 类似，它支持存储的 value 类型相对更多，包括 string(字符串)、 list(链表)、 set(集合)和 zset(有序集合)。这些数据类型都支持 push/pop、add/remove 及取交集并集和差集及">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="告诉你Redis是一个牛逼货"/>
   <meta property="og:site_name" content="Lufy&#39;s Great Route"/>
 
   
@@ -46,8 +49,7 @@
 </nav>
 <div class="clearfix"></div></header>
   <div id="content" class="inner">
-    <div id="main-col" class="alignleft"><div id="wrapper">
-  <article class="post">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
   
   <div class="post-content">
     <header>
@@ -57,7 +59,7 @@
       
       
   
-    <h1 class="title"><a href="/2014/06/01/redis_newer/">告诉你Redis是一个牛逼货</a></h1>
+    <h1 class="title">告诉你Redis是一个牛逼货</h1>
   
 
     </header>
@@ -125,7 +127,19 @@
     <footer>
       
         
+  
+  <div class="categories">
+    <a href="/categories/NoSql&&NewSql/">NoSql&&NewSql</a>
+  </div>
+
         
+  
+  <div class="tags">
+    <a href="/tags/Big Data/">Big Data</a>, <a href="/tags/NoSql/">NoSql</a>
+  </div>
+
+
+        <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"slide":{"type":"slide","bdImg":"3","bdPos":"right","bdTop":"100"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"24"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
       
       <div class="clearfix"></div>
     </footer>
@@ -133,233 +147,26 @@
 </article>
 
 
+<section id="comment">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"yangchao228"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.unstable.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                    || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</section>
 
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-04-06T11:01:00.000Z"><a href="/2014/04/06/machine_learning_2/">4月 6 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/04/06/machine_learning_2/">集体智慧编程系列-2.提供推荐</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>本章主要内容是教会大家【<em>如何根据群体偏好来给人们提供推荐</em>】，这些应用多如牛毛，我就不跟大家像书里那样废话一堆了(不好意思，作者大人），直接进入正题吧，嘻嘻!</p>
-<h3 id="协作型过滤">协作型过滤</h3>
-<p>一个协作型过滤算法通常的做法就是对一大群人进行搜索，并从中找出与我们品味相近的一小群人。算法会对这些人所偏爱的其他内容进行考察，并将它们组合起来构造出一个经过排名的推荐列表。</p>
-<h3 id="搜集偏好">搜集偏好</h3>
-<p>我们要做的第一件事就是寻找一种表达不同人及其偏好的方法。在python中，达到这一目的的一种非常简单的方法是使用一个嵌套的字典。</p>
-<pre><code><span class="preprocessor"># 这是一个字典结构表示每个影评人对所看电影的评分情况，后续所有</span>
-<span class="preprocessor">#计算均基于该数据</span>
-critics={<span class="string">'Lisa Rose'</span>: {<span class="string">'Lady in the Water'</span>: <span class="number">2.5</span>, <span class="string">'Snakes on a Plane'</span>: <span class="number">3.5</span>,
- <span class="string">'Just My Luck'</span>: <span class="number">3.0</span>, <span class="string">'Superman Returns'</span>: <span class="number">3.5</span>, <span class="string">'You, Me and Dupree'</span>: <span class="number">2.5</span>,
- <span class="string">'The Night Listener'</span>: <span class="number">3.0</span>},
-<span class="string">'Gene Seymour'</span>: {<span class="string">'Lady in the Water'</span>: <span class="number">3.0</span>, <span class="string">'Snakes on a Plane'</span>: <span class="number">3.5</span>,
- <span class="string">'Just My Luck'</span>: <span class="number">1.5</span>, <span class="string">'Superman Returns'</span>: <span class="number">5.0</span>, <span class="string">'The Night Listener'</span>: <span class="number">3.0</span>,
- <span class="string">'You, Me and Dupree'</span>: <span class="number">3.5</span>},
-<span class="string">'Michael Phillips'</span>: {<span class="string">'Lady in the Water'</span>: <span class="number">2.5</span>, <span class="string">'Snakes on a Plane'</span>: <span class="number">3.0</span>,
- <span class="string">'Superman Returns'</span>: <span class="number">3.5</span>, <span class="string">'The Night Listener'</span>: <span class="number">4.0</span>},
-<span class="string">'Claudia Puig'</span>: {<span class="string">'Snakes on a Plane'</span>: <span class="number">3.5</span>, <span class="string">'Just My Luck'</span>: <span class="number">3.0</span>,
- <span class="string">'The Night Listener'</span>: <span class="number">4.5</span>, <span class="string">'Superman Returns'</span>: <span class="number">4.0</span>,
- <span class="string">'You, Me and Dupree'</span>: <span class="number">2.5</span>},
-<span class="string">'Mick LaSalle'</span>: {<span class="string">'Lady in the Water'</span>: <span class="number">3.0</span>, <span class="string">'Snakes on a Plane'</span>: <span class="number">4.0</span>,
- <span class="string">'Just My Luck'</span>: <span class="number">2.0</span>, <span class="string">'Superman Returns'</span>: <span class="number">3.0</span>, <span class="string">'The Night Listener'</span>: <span class="number">3.0</span>,
- <span class="string">'You, Me and Dupree'</span>: <span class="number">2.0</span>},
-<span class="string">'Jack Matthews'</span>: {<span class="string">'Lady in the Water'</span>: <span class="number">3.0</span>, <span class="string">'Snakes on a Plane'</span>: <span class="number">4.0</span>,
- <span class="string">'The Night Listener'</span>: <span class="number">3.0</span>, <span class="string">'Superman Returns'</span>: <span class="number">5.0</span>, <span class="string">'You, Me and Dupree'</span>: <span class="number">3.5</span>},
-<span class="string">'Toby'</span>: {<span class="string">'Snakes on a Plane'</span>:<span class="number">4.5</span>,<span class="string">'You, Me and Dupree'</span>:<span class="number">1.0</span>,<span class="string">'Superman         Returns'</span>:<span class="number">4.0</span>}}
-</code></pre><h3 id="寻找相近的用户">寻找相近的用户</h3>
-<p>搜集完人们的偏好数据之后，我们需要有一种方法来确定人们在品味方面的相似程度。为此，我们可以将每个人与所有其他人进行对比，并计算他们的相似度评价值。有若干种方法可以达到此目的，比如以下两套计算相似度评价值的体系：欧几里德距离和皮尔逊相关度。<br>关于欧几里德距离评价方法，它以经过人们一致评价的物品为坐标轴，然后将参与评价的人绘制到图上，并考察他们彼此间的距离远近，如下图所示：<br><img src="http://drp.io/files/534aada2ea491.png" alt=""><br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/04/06/machine_learning_2/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-04-06T10:44:58.000Z"><a href="/2014/04/06/machine_learning_1/">4月 6 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/04/06/machine_learning_1/">集体智慧编程系列-1.开篇</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>本人java出身，百度web攻城尸一枚，以为自己这一辈子都只和web对干，突然有一天被老大叫到小黑屋里后出来立马华丽丽地“转职”，变成了一枚当下很火的数据工程师，接手了电商项目的数据平台工作，这是人生第一次从无到有做一个项目，之前也从未接触，当时由于正好被升职，头脑热呼呼的，管她妈妈是谁就这么上了，干了个半年，体会到做数据还真的有点无聊，对应的pm也由于上面的决策没法推动产品，我这半年一直忙于工程很少掺和业务产品的事情，但是我是在一个业务研发部门搞基础建设一没这个资源和条件，二上面确实也不是最关心；那我怎么办，大家都说数据是黄金，我拿着黄金却不会花，我想哭啊想哭！古人云：书中自有黄金屋；那好去看书学习，在同事和网友们大力推荐下找到了一本书《集体智慧编程》，也就是我这一系列的源头所在，觉得我写的不给力，可以直接去找原文看看，</p>
-<p>说了以上的废话，就当是我阐述我看这本书的背景了，用以激起同路人（数据挖掘、机器学习小白）的共鸣，哈哈，那就进入开篇正题吧。</p>
-<hr>
-<h2 id="背景介绍">背景介绍</h2>
-<p><strong>Google</strong>和最近推出<em>纸牌屋</em>的<strong>Netflix</strong>这两家公司相比家喻户晓了，它们有什么共同之处？——算法先进牛叉！将来自不同人群的数据加以组合进而得出新结论并创造出新的商机，这种信息采集、以及对其加以解释的计算能力已经激发起了很多巨大的协作型商机，并且加深了对用户和顾客更好的理解。约会网站帮助人们更快地找他们好”机油“，预测机票价格的公司不断涌现，为了创造更有针对性的广告，每一个企业都想更好地了解他们顾客，这仅仅是<strong>集体智慧</strong>这一新兴领域的几个例子而已，层出不穷的新服务意味着每天都会有新的商机涌现。笔者绝对相信，理解机器学习和统计学在许多不同领域都会变得愈加重要（坚决抵制自卖自夸的无节操行为）</p>
-<h2 id="什么集体智慧？（Collective_Intelligence）">什么集体智慧？（Collective Intelligence）</h2>
-<p>通常的含义是为了创造新的想法，而将一群人的行为、偏好或思想组合在一起。集体智慧真正关注的是从独立的数据提供者那里得出新的结论。</p>
-<p>比如金融市场，价格并不是由某一个个体所决定，它由许多独立个体交易行为共同决定，大量的参与者根据他们对未来价格信息进行契约交易，这样的市场在价格预测效果方面，往往也被认为要比独立进行预测的专家们表现的更好，这是因为市场将知识、经验和成百上千人的意志组织在一起，形成了一种不依赖个人观点的预测。</p>
-<p>尽管集体智慧在Internet之前就已经存在，单自从有了Internet，从数千上万网民中搜集信息的能力为人们提供更多的可能，一直以来，人们都在利用Internet购买所需、搜索信息、需找娱乐等等，所有行为都在不需要你费力地被监控下来，你几乎毫无感觉，但是这些信息却可以组织到一起提取出新的价值。<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/04/06/machine_learning_1/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-04-05T14:51:17.000Z"><a href="/2014/04/05/markdow_init/">4月 5 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/04/05/markdow_init/">markdown最佳入门指南</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>首先大家不要因为标题拍我，也不要无端黑我，以下内容不是我原创的，也是从网上众多的指南中淬炼而来，至少我看了后5分钟，基本搞定了mardown基本用法，以我的智商，想必大家3分钟就全搞定了，好处不用我多说，直接上菜了。</p>
-<h2 id="第一步">第一步</h2>
-<p>当然找一个编辑器来用Markdown写作了，给大家隆重推荐——简书</p>
-<ol>
-<li>注册并登录 <a href="http://jianshu.io" target="_blank">简书</a><br>【ps：本人不是简书的哦，只是觉得这个当作Markdown的在线编辑器，用起来挺爽，而且里面的一些文章还很不错，算是一举两得，一箭双雕】</li>
-<li>点击页面左侧的“写文章”，进入编辑后，新建一篇笔记，然后关键步骤来了，编辑器右上角有一个<strong>预览模式</strong>按钮，点击进入后，你就可以一边写Markdown，一边预览到实际效果了，大赞啊！</li>
-</ol>
-<p><img src="http://ww2.sinaimg.cn/large/687afc7fjw1dzs642j2qoj.jpg" alt=""></p>
-<h2 id="第二步">第二步</h2>
-<p>工具有了，我们就可以开始Markdown之旅了，大家跟上，重点来了</p>
-<h3 id="标题">标题</h3>
-<p>这是最为常用的格式，在平时常用的的文本编辑器中大多是这样实现的：输入文本、选中文本、设置标题格式。在 Markdown 中，你只需要在文本前面加上<strong>#</strong>     即可，同理、你还可以增加二级标题、三级标题、四级标题、五级标题和六级标题，总共六级，只需要增加 <strong>#</strong> 即可，标题字号相应降低。例如：</p>
-<pre><code><span class="preprocessor"># 一级标题</span>
-<span class="preprocessor">## 二级标题</span>
-<span class="preprocessor">### 三级标题</span>
-<span class="preprocessor">#### 四级标题</span>
-<span class="preprocessor">##### 五级标题</span>
-<span class="preprocessor">###### 六级标题</span>
-</code></pre><p><em>【注意】</em> <strong>#</strong>和“标题内容”之间建议保留一个空格，这是最标准的Markdown写法。<br>如下图所示：</p>
-<p><img src="http://ww4.sinaimg.cn/large/687afc7fjw1dzs5crii94j.jpg" alt=""><br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/04/05/markdow_init/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-04-05T08:32:21.000Z"><a href="/2014/04/05/python-special-1/">4月 5 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/04/05/python-special-1/">【python特殊用法系列1】filter,map,reduce,lambda</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>看到这篇文章的人，想必都对python的各种诡谲技巧是又爱又恨，也都抱着掌握这些技巧，改善自己的生活，提升自己的境界；哈哈本文可能不能让大家这么快速做出改变，但可以让大家稍微见识一下python的几种特殊技巧和用法。这篇文章主要是介绍filter、map、reduce、lambda，后续还会继续该系列主题的淬炼，废话不多说，进入主题。</p>
-<h3 id="filter">filter</h3>
-<h4 id="filter(function,_sequence):">filter(function, sequence):</h4>
-<p>对sequence中的item依次执行function(item)，将执行结果为True的item组成一个List/String/Tuple(取决于sequence类型）返回，示例如下：</p>
-<pre><code><span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span> <span class="keyword">return</span> x % <span class="number">2</span> != <span class="number">0</span> <span class="keyword">and</span> x % <span class="number">3</span> != <span class="number">0</span>
-<span class="prompt">&gt;&gt;&gt; </span>filter(f, range(<span class="number">2</span>, <span class="number">25</span>))
-[<span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>, <span class="number">17</span>, <span class="number">19</span>, <span class="number">23</span>]
-<span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span> <span class="keyword">return</span> x != <span class="string">'a'</span>
-<span class="prompt">&gt;&gt;&gt; </span>filter(f, <span class="string">"abcdef"</span>)
-<span class="string">'bcdef'</span>
-</code></pre><h3 id="map">map</h3>
-<h4 id="map(function,_sequence):">map(function, sequence):</h4>
-<p>对sequence中的item依次执行function（item），将执行结果组成一个List返回<br>另外map也支持多个sequence，当然这也要求function支持相应数量的参数输入，示例如下：</p>
-<pre><code><span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">cube</span><span class="params">(x)</span>:</span> <span class="keyword">return</span> x*x*x
-<span class="prompt">&gt;&gt;&gt; </span>map(cube, range(<span class="number">1</span>, <span class="number">11</span>))
-[<span class="number">1</span>, <span class="number">8</span>, <span class="number">27</span>, <span class="number">64</span>, <span class="number">125</span>, <span class="number">216</span>, <span class="number">343</span>, <span class="number">512</span>, <span class="number">729</span>, <span class="number">1000</span>]
-<span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">cube</span><span class="params">(x)</span> :</span> <span class="keyword">return</span> x + x
-
-<span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x, y)</span>:</span> <span class="keyword">return</span> x+y
-<span class="prompt">&gt;&gt;&gt; </span>map(add, range(<span class="number">8</span>), range(<span class="number">8</span>))
-[<span class="number">0</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">10</span>, <span class="number">12</span>, <span class="number">14</span>]
-</code></pre><p>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/04/05/python-special-1/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-<nav id="pagination">
-  
-  
-    <a href="/page/2/" class="alignright next">下一页</a>
-  
-  <div class="clearfix"></div>
-</nav></div></div>
+</div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
